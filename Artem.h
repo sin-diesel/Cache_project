@@ -18,16 +18,19 @@ struct hash_table
 };
 
 // return hash of the page
-int hash_func (int page);
+int hash_func (int page, int size);
 
 // create hash table according to list
 struct hash_table hesh_init (struct list_t list);
 
 // check if the page in hash table (ret 1 if yes, 0 - vice verse)
-char hash_chech_elem (int page, struct hash_table table);
+char hash_check_elem (int page, struct hash_table s);
 
 // add this page in hash table
-void hash_add_elem (int page, struct hash_table table);
+void hash_add_elem (int page, struct hash_table s);
 
 // delete this page from hash table
-void hash_delete_elem (int page, struct hash_table table);
+void hash_delete_elem (int page, struct hash_table s);
+
+// free hash table
+void hash_free (struct hash_table s);
