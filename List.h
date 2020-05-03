@@ -52,22 +52,11 @@ void Push_Front(struct list_t* list, int page , int hash);
 void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int hash);
 
 //Move elem forward by page
+//if page not found nothing happens
 void Move_Elem_Page(struct list_t* list, int page);
 
 //Move elem forwardz by hash
 void Move_Elem_Hash(struct list_t* list, int hash);
-
-//delete elem in the end
-void Pop_Back (struct list_t* list);
-
-//delete elem in the top
-void Pop_Front (struct list_t* list);
-
-//delete elem by page
-void Delete_by_Page(struct list_t* list, int page);
-
-//delete elem by hash
-void Delete_by_Hash(struct list_t* list, int hash);
 
 //free list
 void Free_List (struct list_t* list);
