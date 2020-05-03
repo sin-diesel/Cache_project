@@ -51,7 +51,7 @@ void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int has
 void Move_Elem_Page(struct list_t* list, int page);
 
 //Move elem forward by hash
-void Move_Elem_Page(struct list_t* list, int hash);
+void Move_Elem_Hash(struct list_t* list, int hash);
 
 //delete elem in the end
 void Pop_Back (struct list_t* list);
