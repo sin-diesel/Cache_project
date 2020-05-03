@@ -27,10 +27,10 @@ struct node_t* Front_Elem(struct list_t* list);
 struct node_t* Back_Elem(struct list_t* list);
 
 //access to the element by page
-struct node_t* Page_Elem(struct list_t* list);
+struct node_t* Elem_with_Page(struct list_t* list, int page);
 
 //access to the element by hash
-struct node_t* Hash_Elem(struct list_t* list);
+struct node_t* Elem_with_Hash(struct list_t* list, int hash);
 
 //check whether the underlying container is empty
 bool Is_Empty (struct list_t* list);
@@ -46,6 +46,9 @@ void Push_Front(struct list_t* list, int page , int hash);
 
 //add elem in the top of the list1 an, end of the list moves to the top of the list2
 void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int hash);
+
+//Move elem forward
+void Move_Elem_Front(struct list_t* list, int hash, int page);
 
 //delete elem in the end
 void Pop_Back (struct list_t* list);
