@@ -17,7 +17,7 @@ struct list_t* Init_List(int size)
     for (int i = 1; i < size; ++i)
     {
         tmp->next = Create_Node();
-        tmp->next->page = i; tmp->next->hash = -i;
+        //tmp->next->page = i; tmp->next->hash = -i;
         tmp->next->prev = tmp;
         tmp = tmp->next;
     }
