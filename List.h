@@ -6,6 +6,7 @@
 
 struct node_t{
     struct node_t* next;
+    struct node_t* prev;
     int hash;
     int page; // page number
 };
