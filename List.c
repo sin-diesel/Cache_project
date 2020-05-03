@@ -70,7 +70,7 @@ bool Is_Empty (struct list_t* list)
     assert(list);
     if (list->size == 0 && list->front_elem == NULL && list->back_elem == NULL)
         return true;
-    if (list->size == 0 && (list->front_elem != NULL || list->back_elem) != NULL)
+    if (list->size == 0 && (list->front_elem != NULL || list->back_elem != NULL))
     {
         printf("ERROR : list size");
         exit(1);
