@@ -2,7 +2,8 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <stdlib.h>
+#include <assert.h>
 
 struct node_t{
     struct node_t* next;
@@ -50,7 +51,7 @@ void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int has
 //Move elem forward by page
 void Move_Elem_Page(struct list_t* list, int page);
 
-//Move elem forward by hash
+//Move elem forwardz by hash
 void Move_Elem_Hash(struct list_t* list, int hash);
 
 //delete elem in the end
@@ -67,3 +68,9 @@ void Delete_by_Hash(struct list_t* list, int hash);
 
 //free list
 void Free_List (struct list_t* list);
+
+//print list from the front
+void Print_List_Front(struct node_t* front);
+
+//print list from the back
+void Print_List_Back(struct node_t* back);
