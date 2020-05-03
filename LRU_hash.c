@@ -1,65 +1,60 @@
 #include "Artem.h"
 
 
-/*struct hash_item
+/*struct hash_table
 {
-	char flag;
-	struct node_t *list_elem;
+	struct node_t **table;
+	int capacity;
 };
-
-struct hash_table
-{
-	struct hash_item* table;
-	int size;
-};*/
+*/
 
 // return hash of the page
-int hash_func (int page, int size) {
-	return page % size;
+int hash_func (int page, int mod) {
+	return page % mod;
 }
 
 // create hash table according to list
-struct hash_table hesh_init (struct list_t list) {
-	struct hash_table s;
-	s.table = (struct hash_item*) calloc (list.size, sizeof(struct hash_item));
-	assert (s.table != NULL);
+struct hash_table* hesh_init (int capacity) {
+	struct hash_table* s;
+	s->table = (struct node_t**) calloc (capacity, sizeof(struct node_t*));
+	assert (s->table != NULL);
 
-	s.size = list.size;
-	for (int i = 0; i < s.size; ++i)
-		s.table[i].list_elem = list.front_elem[i];
+	s->capacity = capacity;
 
 	return s;
 }
 
-// check if the page in hash table (ret 1 if yes, 0 - vice verse)
+// check if the page in hash table (Cache) (ret 1 if yes, 0 - vice verse)
 char hash_check_elem (int page, struct hash_table s) {
-	int hash_page = hash_func (page, s.size);
-	return (s.table[hash_page].flag == 1) ? 1 : 0;
+	int hash_page = hash_func (page, s.capacity);
+	return (s.table[hash_page] != NULL);
 }
 
 // add this page in hash table
-void hash_add_elem (int page, struct hash_table s) {
+void hash_add_elem (int page, struct hash_table* s, struct node_t* pNode) {
 	
-	if (hash_check_elem (page, s) == 1)
+	assert (pNode != NULL);
+	if (hash_check_elem (page, *s) == 1)
 		return;
 
-	int hash_page = hash_func (page, s.size);
+	int hash_page = hash_func (page, s->capacity);
 
-	s.table[hash_page].flag = 1;
+	s->table[hash_page] = pNode;
 }
 
 // delete this page from hash table
-void hash_delete_elem (int page, struct hash_table table) {
-	if (hash_check_elem (page, s) == 0)
+void hash_delete_elem (int page, struct hash_table* s) {
+	if (hash_check_elem (page, *s) == 0)
 		return;
 	
-	int hash_page = hash_func (page, s.size);
+	int hash_page = hash_func (page, s->capacity);
 
-	s.table[hash_page].flag = 0;
+	s->table[hash_page] = NULL;
 }
 
 // free hash table
-void hash_free (struct hash_table s) {
-	free(s.table);
-	s.size = 0;
+void hash_free (struct hash_table* s) {
+	free(s->table);
+	s->capacity = 0;
+	free (s);
 }
