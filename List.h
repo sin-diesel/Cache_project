@@ -47,8 +47,11 @@ void Push_Front(struct list_t* list, int page , int hash);
 //add elem in the top of the list1 an, end of the list moves to the top of the list2
 void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int hash);
 
-//Move elem forward
-void Move_Elem_Front(struct list_t* list, int hash, int page);
+//Move elem forward by page
+void Move_Elem_Page(struct list_t* list, int page);
+
+//Move elem forward by hash
+void Move_Elem_Page(struct list_t* list, int hash);
 
 //delete elem in the end
 void Pop_Back (struct list_t* list);
