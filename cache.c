@@ -24,7 +24,7 @@ struct cache_t* cache_init(int main_size) {
 	return cache;
 }
 
-void handle_page(struct cache_t* cache, int page) {
+int handle_page(struct cache_t* cache, int page) {
 
 	char result = 0;
 
@@ -37,6 +37,8 @@ void handle_page(struct cache_t* cache, int page) {
 	} else {
 		Move_Elem_Hash(&(cache->main_mem), page_hash);
 	}
+
+	return res;
 }
 
 void delete_cache(struct cache_t* cache) {
@@ -45,6 +47,32 @@ void delete_cache(struct cache_t* cache) {
 	Free_List(cache->main_mem);
 	hash_free(cache->main_hash);
 	free(cache);
+}
+
+void run_tests(struct cache_t* cache, FILE* stream) {
+
+	assert(cache);
+	assert(stream);
+
+	FILE* results = fopen("res.txt", "w");
+	assert(results);
+
+	int page = 0;
+	int hits = 0;
+	int misses = 0;
+	int res = 0;
+
+	while (fscanf(stream, "%d ", &page) == 1) {
+		res = handle_page(cache, page);
+		if (res == 1) {
+			++hits;
+		} else {
+			++missed;
+		}
+	}
+
+	fprintf(results, "Hits: %d\n Misses: %d\n", hits, missed);
+
 }
 
 

@@ -20,15 +20,3 @@ void insert_page_pos(struct cache_t* cache, int pos); /* takes position for inse
 void delete_page_pos(struct cache_t* cache, int pos);
 
 void move_page(struct cache_t* cache, int from, int to);
-
-void CacheOK(struct cache_t* cache);
-
-void CacheDump(struct cache_t* cache);
-
-void insert_page_head(struct cache_t* cache);
-
-void insert_page_tail(struct cache_t* cache);
-
-void delete_page_head(struct cache_t* cache);
-
-void delete_page_tail(struct cache_t* cache);
