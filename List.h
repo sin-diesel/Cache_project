@@ -73,7 +73,7 @@ void Delete_by_Hash(struct list_t* list, int hash);
 void Free_List (struct list_t* list);
 
 //print list from the front
-void Print_List_Front(struct node_t* front);
+void Print_List_Front(struct list_t* list);
 
 //print list from the back
-void Print_List_Back(struct node_t* back);
+void Print_List_Back(struct list_t* list);
