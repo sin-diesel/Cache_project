@@ -32,7 +32,7 @@ struct node_t* Back_Elem(struct list_t* list);
 //return NAN if page not found
 int Hash_with_Page(struct list_t* list, int page);
 
-//return hash by page
+//return page by hash
 //return NAN if page not found
 int Page_with_Hash(struct list_t* list, int hash);
 
