@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <math.h>
 
 struct node_t{
     struct node_t* next;
@@ -27,11 +28,13 @@ struct node_t* Front_Elem(struct list_t* list);
 //access the last element
 struct node_t* Back_Elem(struct list_t* list);
 
-//access to the element by page
-struct node_t* Elem_with_Page(struct list_t* list, int page);
+//return hash by page
+//return NAN if page not found
+int Hash_with_Page(struct list_t* list, int page);
 
-//access to the element by hash
-struct node_t* Elem_with_Hash(struct list_t* list, int hash);
+//return hash by page
+//return NAN if page not found
+int Page_with_Hash(struct list_t* list, int hash);
 
 //check whether the underlying container is empty
 bool Is_Empty (struct list_t* list);
