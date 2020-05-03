@@ -86,19 +86,20 @@ size_t Size_List (struct list_t* list)
 
 void Push_Back(struct list_t* list, int page, int hash)
 {
+    struct node_t* old_back = NULL;
+    struct node_t* new_back = NULL;
     if (list->size == 1)
     {
         list->back_elem->page = page;
         list->back_elem->hash = hash;
         return;
     }
-    struct node_t* old_back = list->back_elem;
-    struct node_t* new_back = NULL;
-    struct node_t* tmp = NULL;
-
+    old_back = list->back_elem;
     new_back = list->front_elem;
+
     list->front_elem = list->front_elem->next;
     list->front_elem->prev = NULL;
+
     new_back->hash = hash;
     new_back->page = page;
     new_back->prev = old_back;
@@ -108,6 +109,30 @@ void Push_Back(struct list_t* list, int page, int hash)
     list->back_elem = new_back;
 }
 
+void Push_Front(struct list_t* list, int page , int hash)
+{
+    struct node_t* old_front = NULL;
+    struct node_t* new_front = NULL;
+    if (list->size == 1)
+    {
+        list->back_elem->page = page;
+        list->back_elem->hash = hash;
+        return;
+    }
+    old_front = list->front_elem;
+    new_front = list->back_elem;
+
+    list->back_elem = list->back_elem->prev;
+    list->back_elem->next = NULL;
+
+    new_front->hash = hash;
+    new_front->page = page;
+    new_front->prev = NULL;
+    new_front->next = old_front;
+
+    old_front->prev = new_front;
+    list->front_elem = new_front;
+}
 
 void Print_List_Front(struct list_t* list)
 {
