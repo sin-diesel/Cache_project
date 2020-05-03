@@ -86,6 +86,11 @@ size_t Size_List (struct list_t* list)
 
 void Push_Back(struct list_t* list, int page, int hash)
 {
+    if (Is_Empty(list))
+    {
+        printf("ERROR: list void");
+        exit(2);
+    }
     struct node_t* old_back = NULL;
     struct node_t* new_back = NULL;
     if (list->size == 1)
@@ -111,6 +116,11 @@ void Push_Back(struct list_t* list, int page, int hash)
 
 void Push_Front(struct list_t* list, int page , int hash)
 {
+    if (Is_Empty(list))
+    {
+        printf("ERROR: list void");
+        exit(3);
+    }
     struct node_t* old_front = NULL;
     struct node_t* new_front = NULL;
     if (list->size == 1)
@@ -134,8 +144,78 @@ void Push_Front(struct list_t* list, int page , int hash)
     list->front_elem = new_front;
 }
 
+void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int hash)
+{
+    int page_back = list1->back_elem->page;
+    int hash_back = list2->back_elem->hash;
+    Push_Front(list1, page, hash);
+    Push_Front(list2, page_back, hash_back);
+}
+
+void Move_Elem_Page(struct list_t* list, int page)
+{
+    if (Is_Empty(list))
+    {
+        printf("ERROR: list void");
+        exit(4);
+    }
+    if (list->size == 1)
+        return;
+    struct node_t* node = list->front_elem;
+    while (node->page != page)
+    {
+        if (node == NULL)
+            return;
+        node = node->next;
+    }
+    node->next->prev = node->prev;
+    node->prev->next = node->next;
+    node->next = list->front_elem;
+    node->prev = NULL;
+    list->front_elem = node;
+}
+
+void Move_Elem_Hash(struct list_t* list, int hash)
+{
+    if (Is_Empty(list))
+    {
+        printf("ERROR: list void");
+        exit(4);
+    }
+    if (list->size == 1)
+        return;
+    struct node_t* node = list->front_elem;
+    while (node->hash != hash)
+    {
+        node = node->next;
+        if (node == NULL)
+            return;
+    }
+    node->next->prev = node->prev;
+    node->prev->next = node->next;
+    node->next = list->front_elem;
+    node->prev = NULL;
+    list->front_elem = node;
+}
+
+void Free_List (struct list_t* list)
+{
+    struct node_t* top = list->front_elem;
+    struct node_t* tmp = NULL;
+    while (top != NULL)
+    {
+        tmp = top->next;
+        free(top);
+        top = tmp;
+    }
+    list->size = 0;
+    free(list);
+}
+
 void Print_List_Front(struct list_t* list)
 {
+    if (list->size == 0)
+        return;
     struct node_t* tmp = list->front_elem;
     while (tmp != NULL)
     {
@@ -147,6 +227,8 @@ void Print_List_Front(struct list_t* list)
 
 void Print_List_Back(struct list_t* list)
 {
+    if (list->size == 0)
+        return;
     struct node_t* tmp = list->back_elem;
     while (tmp != NULL)
     {
