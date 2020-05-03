@@ -16,6 +16,7 @@ int hash_func (int page, int mod) {
 // create hash table according to list
 struct hash_table* hesh_init (int capacity) {
 	struct hash_table* s;
+	s = (struct hash_table*) calloc (1, sizeof (struct hash_table));
 	s->table = (struct node_t**) calloc (capacity, sizeof(struct node_t*));
 	assert (s->table != NULL);
 
