@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-struct cache_t { /* cache data structure */
+struct cache_t { /*  cache data structure */
 
 	struct list_t main_mem; /* main memory list + hash */
 	struct hash_t main_hash;
