@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
@@ -37,7 +36,7 @@ int Hash_with_Page(struct list_t* list, int page);
 int Page_with_Hash(struct list_t* list, int hash);
 
 //check whether the underlying container is empty
-bool Is_Empty (struct list_t* list);
+char Is_Empty (struct list_t* list);
 
 //returns the number of elements
 size_t Size_List (struct list_t* list);

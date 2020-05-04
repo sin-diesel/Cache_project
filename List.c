@@ -65,17 +65,17 @@ int Page_with_Hash(struct list_t* list, int hash)
     return NAN;
 }
 
-bool Is_Empty (struct list_t* list)
+char Is_Empty (struct list_t* list)
 {
     assert(list);
     if (list->size == 0 && list->front_elem == NULL && list->back_elem == NULL)
-        return true;
+        return 1;
     if (list->size == 0 && (list->front_elem != NULL || list->back_elem != NULL))
     {
         printf("ERROR : list size");
         exit(1);
     }
-    return false;
+    return 0;
 }
 
 size_t Size_List (struct list_t* list)
