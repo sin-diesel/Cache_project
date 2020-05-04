@@ -12,7 +12,7 @@ struct hash_table
 };
 
 // return hash of the page
-int hash_func (int page, int mod);
+int hash_func (int page, int mod );
 
 // create hash table according to list
 struct hash_table* hesh_init (int capacity);
