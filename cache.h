@@ -6,17 +6,11 @@ struct cache_t { /* cache data structure */
 	struct hash_t main_hash;
 	unsigned main_mem_size;
 
-	unsigned elements_ctr;
+	unsigned elements_ctr; /* elements counter */
 }
 
-struct cache_t* cache_init(int main_size);
+struct cache_t cache_init(int main_size); /* initilizes cache */
 
 void handle_page(struct cache_t* cache, int page); /* page handler */
 
-void cache_delete();
-
-void insert_page_pos(struct cache_t* cache, int pos); /* takes position for insertion */
-
-void delete_page_pos(struct cache_t* cache, int pos);
-
-void move_page(struct cache_t* cache, int from, int to);
+void cache_delete(struct cache_t* cache); /* deletes cache */
