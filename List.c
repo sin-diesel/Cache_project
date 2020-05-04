@@ -104,6 +104,8 @@ void Push_Back(struct list_t* list, int page, int hash)
     old_back = list->back_elem;
     new_back = list->front_elem;
 
+    hash_delete_elem(new_back->page, list->hashTable);
+
     list->front_elem = list->front_elem->next;
     list->front_elem->prev = NULL;
 
@@ -135,6 +137,8 @@ void Push_Front(struct list_t* list, int page , int hash)
     }
     old_front = list->front_elem;
     new_front = list->back_elem;
+
+    hash_delete_elem(new_front->page, list->hashTable);
 
     list->back_elem = list->back_elem->prev;
     list->back_elem->next = NULL;
