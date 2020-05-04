@@ -56,6 +56,7 @@ void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int has
 void Move_Elem_Page(struct list_t* list, int page);
 
 //Move elem forwardz by hash
+//if page not found nothing happens
 void Move_Elem_Hash(struct list_t* list, int hash);
 
 //free list
@@ -66,3 +67,5 @@ void Print_List_Front(struct list_t* list);
 
 //print list from the back
 void Print_List_Back(struct list_t* list);
+
+//hah
