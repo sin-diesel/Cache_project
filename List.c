@@ -2,10 +2,11 @@
 
 static struct node_t* Create_Node();
 
-struct list_t* Init_List(int size)
+struct list_t* Init_List(int size, struct hash_table* hashTable)
 {
-    struct node_t* top;
-    struct node_t* tmp;
+    assert(hashTable);
+    struct node_t* top = NULL;
+    struct node_t* tmp = NULL;
     struct list_t* list = (struct list_t*)calloc(1, sizeof(struct list_t));
     assert(list);
     if (size == 0)
@@ -22,6 +23,7 @@ struct list_t* Init_List(int size)
         tmp = tmp->next;
     }
     list->back_elem = tmp;
+    list->hashTable = hashTable;
     return list;
 }
 
@@ -112,6 +114,8 @@ void Push_Back(struct list_t* list, int page, int hash)
 
     old_back->next = new_back;
     list->back_elem = new_back;
+
+    hash_add_elem(page, list->hashTable, list->back_elem);
 }
 
 void Push_Front(struct list_t* list, int page , int hash)
@@ -142,6 +146,8 @@ void Push_Front(struct list_t* list, int page , int hash)
 
     old_front->prev = new_front;
     list->front_elem = new_front;
+
+    hash_add_elem(page, list->hashTable, list->front_elem);
 }
 
 void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int hash)
