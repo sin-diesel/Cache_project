@@ -1,4 +1,4 @@
-#include "Artem.h"
+#include "LRU_hash.h"
 
 
 /*struct hash_table

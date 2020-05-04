@@ -18,7 +18,7 @@ main.o: main.c
 
 .PHONY: all
 all: main.o List.o LRU_hash.o cache.o
-	$(CC) $(CFLAGS) cache.o -o main
+	$(CC) $(CFLAGS) main.o List.o LRU_hash.o cache.o -o main
 
 
 .PHONY: clean
