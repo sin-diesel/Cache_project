@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
+#include "LRU_hash.h"
 
 struct node_t{
     struct node_t* next;
@@ -15,11 +16,12 @@ struct node_t{
 struct list_t{
     struct node_t* front_elem;
     struct node_t* back_elem;
+    struct hash_table* hashTable;
     int size;
 };
 
 //init list of the selected size
-struct list_t* Init_List(int size);
+struct list_t* Init_List(int size, struct hash_table* hashTable);
 
 //access the first element
 struct node_t* Front_Elem(struct list_t* list);
