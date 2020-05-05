@@ -31,14 +31,21 @@ int handle_page(struct cache_t* cache, int page) {
 
 	char result = 0;
 
+	fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
+
 	struct list_t* main_mem = &(cache->main_mem);
 	struct hash_table* main_hash = &(cache->main_hash);
+
+	fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
 
 	result = Hash_with_Page(main_mem, page);
 	int page_hash = hash_func(page, 15);
 
+	fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
+
 	if (result == 1) {
 		Push_Front(main_mem, page, page_hash);
+		fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
 		cache->elements_ctr++;
 	} else {
 		Move_Elem_Hash(main_mem, page_hash);
@@ -60,20 +67,17 @@ void cache_delete(struct cache_t* cache) {
 	free(cache);
 }
 
-void run_tests(struct cache_t* cache, FILE* stream) {
+void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for now */
 
 	assert(cache);
-	assert(stream);
-
-	FILE* results = fopen("res.txt", "w");
-	assert(results);
+	assert(data_source);
 
 	int page = 0;
 	int hits = 0;
 	int misses = 0;
 	int res = 0;
 
-	while (fscanf(stream, "%d ", &page) == 1) {
+	while (fscanf(data_source, "%d ", &page) == 1) {
 		res = handle_page(cache, page);
 		if (res == 1) {
 			++hits;
@@ -82,7 +86,7 @@ void run_tests(struct cache_t* cache, FILE* stream) {
 		}
 	}
 
-	fprintf(results, "Hits: %d\n Misses: %d\n", hits, misses);
+	fprintf(stdout, "Hits: %d\n Misses: %d\n", hits, misses);
  }
 
 

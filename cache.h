@@ -17,4 +17,4 @@ int handle_page(struct cache_t* cache, int page); /* page handler */
 
 void cache_delete(struct cache_t* cache); /* deletes cache */
 
-void run_test(struct cache_t* cache, FILE* stream); /* test program */
+void run_tests(struct cache_t* cache, FILE* data_source); /* test program */
