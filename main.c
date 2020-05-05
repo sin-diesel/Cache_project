@@ -10,9 +10,6 @@ int main () {
 	int main_size = 10;
 
 	struct cache_t cache = cache_init(main_size);
-<<<<<<< HEAD
-=======
->>>>>>> master
 
 	return 0;
 }

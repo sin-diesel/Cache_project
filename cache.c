@@ -78,11 +78,11 @@ void run_tests(struct cache_t* cache, FILE* stream) {
 		if (res == 1) {
 			++hits;
 		} else {
-			++missed;
+			++misses;
 		}
 	}
 
-	fprintf(results, "Hits: %d\n Misses: %d\n", hits, missed);
+	fprintf(results, "Hits: %d\n Misses: %d\n", hits, misses);
  }
 
 

@@ -22,6 +22,7 @@ all: main.o List.o LRU_hash.o cache.o
 
 
 .PHONY: clean
-
 clean:
-	rm -r $(OBJECTS)
+	rm -r -f $(OBJECTS)
+	rm -f cache.o
+	rm -f main
