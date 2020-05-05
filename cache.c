@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include "cache.h"
 #include "List.h"
-#include "Artem.h"
+#include "LRU_hash.h"
+#include <assert.h>
 
 
 struct cache_t cache_init(int main_size) {
@@ -11,13 +12,13 @@ struct cache_t cache_init(int main_size) {
 	assert(main_size >= 0);
 
 	struct cache_t* cache = (struct cache_t*) calloc(1, sizeof(struct cache_t));
-	asert(cache);
+	assert(cache);
 
-	cache->main_mem = Init_list(main_size);
-	assert(cache->main_mem);
+	cache->main_hash = *(hash_init(main_size));
+	assert(&(cache->main_hash));
 
-	cache->main_hash = hash_init(main_mem);
-	assert(cache->main_hash);
+	cache->main_mem = *(Init_List(main_size, &(cache->main_hash)));
+	assert(&(cache->main_mem));
 
 	cache->main_mem_size = main_size;
 
@@ -30,11 +31,11 @@ int handle_page(struct cache_t* cache, int page) {
 
 	char result = 0;
 
-	main_mem = &(cache->main_mem);
-	main_hash = &(cache->main_hash);
+	struct list_t* main_mem = &(cache->main_mem);
+	struct hash_table* main_hash = &(cache->main_hash);
 
-	result = Hash_with_Page(main_mem, page)
-	int page_hash = hash_func(page);
+	result = Hash_with_Page(main_mem, page);
+	int page_hash = hash_func(page, 15);
 
 	if (result == 1) {
 		Push_Front(main_mem, page, page_hash);
@@ -43,15 +44,15 @@ int handle_page(struct cache_t* cache, int page) {
 		Move_Elem_Hash(main_mem, page_hash);
 	}
 
-	return res;
+	return result;
 }
 
-void delete_cache(struct cache_t* cache) {
+void cache_delete(struct cache_t* cache) {
 
 	assert(cache);
 
-	main_mem = &(cache->main_mem);
-	main_hash = &(cache->main_hash);
+	struct list_t* main_mem = &(cache->main_mem);
+	struct hash_table* main_hash = &(cache->main_hash);
 
 	Free_List(main_mem);
 	hash_free(main_hash);
