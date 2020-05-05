@@ -59,31 +59,30 @@ void delete_cache(struct cache_t* cache) {
 	free(cache);
 }
 
-// void run_tests(struct cache_t* cache, FILE* stream) {
+void run_tests(struct cache_t* cache, FILE* stream) {
 
-// 	assert(cache);
-// 	assert(stream);
+	assert(cache);
+	assert(stream);
 
-// 	FILE* results = fopen("res.txt", "w");
-// 	assert(results);
+	FILE* results = fopen("res.txt", "w");
+	assert(results);
 
-// 	int page = 0;
-// 	int hits = 0;
-// 	int misses = 0;
-// 	int res = 0;
+	int page = 0;
+	int hits = 0;
+	int misses = 0;
+	int res = 0;
 
-// 	while (fscanf(stream, "%d ", &page) == 1) {
-// 		res = handle_page(cache, page);
-// 		if (res == 1) {
-// 			++hits;
-// 		} else {
-// 			++missed;
-// 		}
-// 	}
+	while (fscanf(stream, "%d ", &page) == 1) {
+		res = handle_page(cache, page);
+		if (res == 1) {
+			++hits;
+		} else {
+			++missed;
+		}
+	}
 
-// 	fprintf(results, "Hits: %d\n Misses: %d\n", hits, missed);
-
-// }
+	fprintf(results, "Hits: %d\n Misses: %d\n", hits, missed);
+ }
 
 
 

@@ -10,7 +10,8 @@ int main () {
 	int main_size = 10;
 
 	struct cache_t cache = cache_init(main_size);
-	cache_delete(&cache);
+
+	run_tests(&cache, )
 
 	return 0;
 }
