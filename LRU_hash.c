@@ -8,9 +8,10 @@
 };
 */
 
-// return hash of the page
-int hash_func (int page, int mod) {
-	return page % mod;
+// return hash of the page (hash < size of hash table)
+int hash_func (int page, struct hash_table s) {
+	int hash = ((page < 0) ? -page : page) % s.capacity;
+	return hash;
 }
 
 // create hash table according to list
