@@ -50,7 +50,7 @@ int Hash_with_Page(struct list_t* list, int page)
             return node->hash;
         node = node->next;
     }
-    return NAN;
+    return -1;
 }
 
 int Page_with_Hash(struct list_t* list, int hash)
@@ -64,7 +64,7 @@ int Page_with_Hash(struct list_t* list, int hash)
             return node->page;
         node = node->next;
     }
-    return NAN;
+    return -1;
 }
 
 char Is_Empty (struct list_t* list)
