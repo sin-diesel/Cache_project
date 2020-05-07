@@ -6,7 +6,7 @@
 
 void generate_nums(int iterations, FILE* stream) {
 
-	int const max_page_num = 10000;
+	int const max_page_num = 10;
 	srand(time(NULL));
 
 	for (int i = 0; i < iterations; ++i) {

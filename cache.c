@@ -39,15 +39,16 @@ int handle_page(struct cache_t* cache, int page) {
 	fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
 
 	result = Hash_with_Page(main_mem, page);
-	int page_hash = hash_func(page, 15);
+	int page_hash = hash_func(page, 10000000);
 
 	fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
 
-	if (result == 1) {
+	if (result != NAN) {
 		Push_Front(main_mem, page, page_hash);
-		fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
+		fprintf(stderr, "Okay hit in: %d %s\n", __LINE__, __func__);	
 		cache->elements_ctr++;
 	} else {
+		fprintf(stderr, "Okay miss in: %d %s\n", __LINE__, __func__);
 		Move_Elem_Hash(main_mem, page_hash);
 	}
 
