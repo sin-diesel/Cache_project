@@ -18,12 +18,13 @@ struct list_t* Init_List(int size, struct hash_table* hashTable)
     for (int i = 1; i < size; ++i)
     {
         tmp->next = Create_Node();
-        //tmp->next->page = i; tmp->next->hash = -i;
+        tmp->next->page = i;
         tmp->next->prev = tmp;
         tmp = tmp->next;
     }
     list->back_elem = tmp;
     list->hashTable = hashTable;
+    assert(list->back_elem);
     return list;
 }
 
@@ -37,34 +38,6 @@ struct node_t* Back_Elem(struct list_t* list)
 {
     assert(list);
     return list->back_elem;
-}
-
-int Hash_with_Page(struct list_t* list, int page)
-{
-    struct node_t* node;
-    assert(list);
-    node = list->front_elem;
-    while (node != NULL)
-    {
-        if (node->page == page)
-            return node->hash;
-        node = node->next;
-    }
-    return -1;
-}
-
-int Page_with_Hash(struct list_t* list, int hash)
-{
-    struct node_t* node;
-    assert(list);
-    node = list->front_elem;
-    while (node != NULL)
-    {
-        if (node->hash == hash)
-            return node->page;
-        node = node->next;
-    }
-    return -1;
 }
 
 char Is_Empty (struct list_t* list)
@@ -86,7 +59,7 @@ size_t Size_List (struct list_t* list)
     return list->size;
 }
 
-void Push_Back(struct list_t* list, int page, int hash)
+void Push_Back(struct list_t* list, int page)
 {
     if (Is_Empty(list))
     {
@@ -98,7 +71,6 @@ void Push_Back(struct list_t* list, int page, int hash)
     if (list->size == 1)
     {
         list->back_elem->page = page;
-        list->back_elem->hash = hash;
         return;
     }
     old_back = list->back_elem;
@@ -109,7 +81,6 @@ void Push_Back(struct list_t* list, int page, int hash)
     list->front_elem = list->front_elem->next;
     list->front_elem->prev = NULL;
 
-    new_back->hash = hash;
     new_back->page = page;
     new_back->prev = old_back;
     new_back->next = NULL;
@@ -120,8 +91,9 @@ void Push_Back(struct list_t* list, int page, int hash)
     hash_add_elem(page, list->hashTable, list->back_elem);
 }
 
-void Push_Front(struct list_t* list, int page , int hash)
+void Push_Front(struct list_t* list, int page)
 {
+    Print_List_Back(list);
     if (Is_Empty(list))
     {
         printf("ERROR: list void");
@@ -132,7 +104,6 @@ void Push_Front(struct list_t* list, int page , int hash)
     if (list->size == 1)
     {
         list->back_elem->page = page;
-        list->back_elem->hash = hash;
         return;
     }
     old_front = list->front_elem;
@@ -143,7 +114,6 @@ void Push_Front(struct list_t* list, int page , int hash)
     list->back_elem = list->back_elem->prev;
     list->back_elem->next = NULL;
 
-    new_front->hash = hash;
     new_front->page = page;
     new_front->prev = NULL;
     new_front->next = old_front;
@@ -154,62 +124,40 @@ void Push_Front(struct list_t* list, int page , int hash)
     hash_add_elem(page, list->hashTable, list->front_elem);
 }
 
-void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int hash)
+void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page)
 {
     int page_back = list1->back_elem->page;
-    int hash_back = list2->back_elem->hash;
-    Push_Front(list1, page, hash);
-    Push_Front(list2, page_back, hash_back);
+    Push_Front(list1, page);
+    Push_Front(list2, page_back);
 }
 
 void Move_Elem_Page(struct list_t* list, int page)
 {
-    if (Is_Empty(list))
-    {
-        printf("ERROR: list void");
-        exit(4);
-    }
-    if (list->size == 1)
-        return;
-    struct node_t* node = list->front_elem;
-    while (node->page != page)
-    {
-        if (node == NULL)
-            return;
-        node = node->next;
-    }
-    node->next->prev = node->prev;
-    node->prev->next = node->next;
-    node->next = list->front_elem;
-    node->prev = NULL;
-    list->front_elem = node;
-}
-
-void Move_Elem_Hash(struct list_t* list, int hash)
-{
     assert(list);
-    if (Is_Empty(list))
-    {
-        printf("ERROR: list void");
-        exit(4);
-    }
-    if (list->size == 1)
+    struct node_t* node = NULL;
+    struct node_t* tmp = NULL;
+
+    node = hash_page_position(page, list->hashTable);
+    if(node == NULL)
         return;
-    if (list->front_elem->hash == hash)
+
+    if (node == list->front_elem)
         return;
-    struct node_t* node = list->front_elem;
-    while (node->hash != hash)
+
+    if (node == list->back_elem)
     {
-        node = node->next;
-        if (node == NULL)
-            return;
-    }
-    node->prev->next = node->next;
-    if (node->next != NULL)
-        node->next->prev = node->prev;
+        tmp = node->prev;
+        tmp->next = NULL;
+        list->back_elem = tmp;
+    } else
+        {
+            node->prev->next = node->next;
+            node->next->prev = node->prev;
+        }
     node->next = list->front_elem;
-    node->prev = NULL;
+    list->front_elem->prev = node;
     list->front_elem = node;
+    node->prev = NULL;
 }
 
 void Free_List (struct list_t* list)
@@ -233,7 +181,7 @@ void Print_List_Front(struct list_t* list)
     struct node_t* tmp = list->front_elem;
     while (tmp != NULL)
     {
-        printf("[p-%d, h-%d]->", tmp->page, tmp->hash);
+        printf("[%d]->", tmp->page);
         tmp = tmp->next;
     }
     printf("\n");
@@ -246,7 +194,7 @@ void Print_List_Back(struct list_t* list)
     struct node_t* tmp = list->back_elem;
     while (tmp != NULL)
     {
-        printf("<-[p-%d, h-%d]", tmp->page, tmp->hash);
+        printf("<-[%d]", tmp->page);
         tmp = tmp->prev;
     }
     printf("\n");
@@ -258,3 +206,25 @@ static struct node_t* Create_Node()
     assert(node);
     return node;
 }
+
+/*
+void Assert_List(struct list_t* list)
+{
+    Is_Empty(list);
+    if(list->front_elem->prev == NULL)
+    {
+        fprintf(stderr, "ERROR: There is pointer to the parent of the front node");
+        exit(3);
+    }
+    if(list->back_elem->next == NULL)
+    {
+        fprintf(stderr, "ERROR: There is pointer to the child of the back node");
+        exit(3);
+    }
+    struct node_t* node = list->front_elem;
+    while (node != NULL)
+    {
+
+    }
+}
+*/
