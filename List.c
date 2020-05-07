@@ -18,12 +18,13 @@ struct list_t* Init_List(int size, struct hash_table* hashTable)
     for (int i = 1; i < size; ++i)
     {
         tmp->next = Create_Node();
-        //tmp->next->page = i; tmp->next->hash = -i;
+        tmp->next->page = i; tmp->next->hash = i;
         tmp->next->prev = tmp;
         tmp = tmp->next;
     }
     list->back_elem = tmp;
     list->hashTable = hashTable;
+    assert(list->back_elem);
     return list;
 }
 
@@ -122,6 +123,7 @@ void Push_Back(struct list_t* list, int page, int hash)
 
 void Push_Front(struct list_t* list, int page , int hash)
 {
+    Print_List_Back(list);
     if (Is_Empty(list))
     {
         printf("ERROR: list void");
@@ -164,52 +166,60 @@ void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page, int has
 
 void Move_Elem_Page(struct list_t* list, int page)
 {
-    if (Is_Empty(list))
-    {
-        printf("ERROR: list void");
-        exit(4);
-    }
-    if (list->size == 1)
-        return;
+    assert(list);
     struct node_t* node = list->front_elem;
+    struct node_t* tmp = NULL;
     while (node->page != page)
     {
+        node = node->next;
         if (node == NULL)
             return;
-        node = node->next;
     }
-    node->next->prev = node->prev;
-    node->prev->next = node->next;
+    if (node == list->front_elem)
+        return;
+    if (node == list->back_elem)
+    {
+        tmp = node->prev;
+        tmp->next = NULL;
+        list->back_elem = tmp;
+    } else
+        {
+            node->prev->next = node->next;
+            node->next->prev = node->prev;
+        }
     node->next = list->front_elem;
-    node->prev = NULL;
+    list->front_elem->prev = node;
     list->front_elem = node;
+    node->prev = NULL;
 }
 
 void Move_Elem_Hash(struct list_t* list, int hash)
 {
     assert(list);
-    if (Is_Empty(list))
-    {
-        printf("ERROR: list void");
-        exit(4);
-    }
-    if (list->size == 1)
-        return;
-    if (list->front_elem->hash == hash)
-        return;
     struct node_t* node = list->front_elem;
+    struct node_t* tmp = NULL;
     while (node->hash != hash)
     {
         node = node->next;
         if (node == NULL)
             return;
     }
-    node->prev->next = node->next;
-    if (node->next != NULL)
+    if (node == list->front_elem)
+        return;
+    if (node == list->back_elem)
+    {
+        tmp = node->prev;
+        tmp->next = NULL;
+        list->back_elem = tmp;
+    } else
+    {
+        node->prev->next = node->next;
         node->next->prev = node->prev;
+    }
     node->next = list->front_elem;
-    node->prev = NULL;
+    list->front_elem->prev = node;
     list->front_elem = node;
+    node->prev = NULL;
 }
 
 void Free_List (struct list_t* list)
