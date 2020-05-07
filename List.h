@@ -57,4 +57,4 @@ void Print_List_Front(struct list_t* list);
 void Print_List_Back(struct list_t* list);
 
 //Assert List
-//void Assert_List(struct list_t* list);
+void Assert_List(struct list_t* list);
