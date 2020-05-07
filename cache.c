@@ -76,7 +76,7 @@ void cache_delete(struct cache_t* cache) {
 	struct list_t* main_mem = &(cache->main_mem);
 	struct hash_table* main_hash = &(cache->main_hash);
 
-	Free_List(main_mem);
+	Free_List(main_mem); //first delete hash then list
 	hash_free(main_hash);
 
 	free(cache);
