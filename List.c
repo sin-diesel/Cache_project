@@ -187,12 +187,15 @@ void Move_Elem_Page(struct list_t* list, int page)
 
 void Move_Elem_Hash(struct list_t* list, int hash)
 {
+    assert(list);
     if (Is_Empty(list))
     {
         printf("ERROR: list void");
         exit(4);
     }
     if (list->size == 1)
+        return;
+    if (list->front_elem->hash == hash)
         return;
     struct node_t* node = list->front_elem;
     while (node->hash != hash)
@@ -201,8 +204,9 @@ void Move_Elem_Hash(struct list_t* list, int hash)
         if (node == NULL)
             return;
     }
-    node->next->prev = node->prev;
     node->prev->next = node->next;
+    if (node->next != NULL)
+        node->next->prev = node->prev;
     node->next = list->front_elem;
     node->prev = NULL;
     list->front_elem = node;
