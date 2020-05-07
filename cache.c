@@ -9,12 +9,13 @@
 
 struct cache_t cache_init(int main_size) {
 
+	//int capacity = ? We should try several different values (f.e. 5 * m_size, 7 * m_size, etc.)
 	assert(main_size >= 0);
 
 	struct cache_t* cache = (struct cache_t*) calloc(1, sizeof(struct cache_t));
 	assert(cache);
 
-	cache->main_hash = *(hash_init(main_size));
+	cache->main_hash = *(hash_init(/*capacity*/));
 	assert(&(cache->main_hash));
 
 	cache->main_mem = *(Init_List(main_size, &(cache->main_hash)));
@@ -57,6 +58,17 @@ int handle_page(struct cache_t* cache, int page) {
 	return result;
 }
 
+/*
+int handle_page(struct cache_t* cache, int page) {
+	int res;
+	if ((res = hash_check_elem (page, cache->main_hash)) == 0)
+		push_front (page, cache->main_mem);
+
+	return res;
+}
+
+*/
+
 void cache_delete(struct cache_t* cache) {
 
 	assert(cache);
@@ -92,6 +104,21 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 	fprintf(stdout, "Hits: %d\n Misses: %d\n", hits, misses);
  }
 
+/*
+
+void run_tests(struct cache_t* cache, FILE* data_source) {
+	int hits = 0;
+	int n = 0;
+	
+	while (fscanf(data_source, "%d ", &page) == 1) {
+		hits += handle_page(cache, page) == 1;
+		n++;
+	}
+
+	fprintf(stdout, "Hits: %d\n Misses: %d\n", hits, n - hits);
+}
+
+*/
 
 
 
