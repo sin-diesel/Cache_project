@@ -13,7 +13,7 @@ struct cache_t { /* cache data structure */
 
 struct cache_t cache_init(int main_size); /* initilizes cache */
 
-int handle_page(struct cache_t* cache, int page); /* page handler */
+int handle_page(struct cache_t* cache, int page); /* page handler, returns -1 if miss and page hash if hit*/
 
 void cache_delete(struct cache_t* cache); /* deletes cache */
 

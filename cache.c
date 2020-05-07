@@ -31,26 +31,23 @@ int handle_page(struct cache_t* cache, int page) {
 
 	char result = 0;
 
-	fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
-
 	struct list_t* main_mem = &(cache->main_mem);
 	struct hash_table* main_hash = &(cache->main_hash);
 
-	fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
 
 	result = Hash_with_Page(main_mem, page);
 	int page_hash = hash_func(page, 10000000);
 
-	fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
-
-	if (result != NAN) {
-		Push_Front(main_mem, page, page_hash);
+	if (result != -1) {
 		fprintf(stderr, "Okay hit in: %d %s\n", __LINE__, __func__);	
 		cache->elements_ctr++;
+		Move_Elem_Hash(main_mem, page_hash);
+		fprintf(stderr, "Okay in: %d %s\n",  __LINE__, __func__);
 	} else {
 		fprintf(stderr, "Okay miss in: %d %s\n", __LINE__, __func__);
-		Move_Elem_Hash(main_mem, page_hash);
+		Push_Front(main_mem, page, page_hash);
 	}
+
 
 	return result;
 }
@@ -80,7 +77,7 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 
 	while (fscanf(data_source, "%d ", &page) == 1) {
 		res = handle_page(cache, page);
-		if (res == 1) {
+		if (res != -1) {
 			++hits;
 		} else {
 			++misses;
