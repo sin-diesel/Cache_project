@@ -18,7 +18,7 @@ struct list_t* Init_List(int size, struct hash_table* hashTable)
     for (int i = 1; i < size; ++i)
     {
         tmp->next = Create_Node();
-        tmp->next->page = i;
+        //tmp->next->page = i;
         tmp->next->prev = tmp;
         tmp = tmp->next;
     }
@@ -207,24 +207,33 @@ static struct node_t* Create_Node()
     return node;
 }
 
-/*
+
 void Assert_List(struct list_t* list)
 {
     Is_Empty(list);
     if(list->front_elem->prev == NULL)
     {
-        fprintf(stderr, "ERROR: There is pointer to the parent of the front node");
+        fprintf(stderr, "ERROR List: There is pointer to the parent of the front node");
         exit(3);
     }
     if(list->back_elem->next == NULL)
     {
-        fprintf(stderr, "ERROR: There is pointer to the child of the back node");
-        exit(3);
+        fprintf(stderr, "ERROR List: There is pointer to the child of the back node");
+        exit(4);
     }
     struct node_t* node = list->front_elem;
     while (node != NULL)
     {
-
+        if (node->next == NULL && node != list->back_elem)
+        {
+            fprintf(stderr, "ERROR List: Node with page %d don't have next node ptr", node->page);
+            exit(5);
+        }
+        if (node->prev == NULL && node != list->front_elem)
+        {
+            fprintf(stderr, "ERROR List: Node with page %d don't have prev node ptr", node->page);
+            exit(6);
+        }
     }
 }
-*/
+
