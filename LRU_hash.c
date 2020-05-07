@@ -46,8 +46,8 @@ void hash_add_elem (int page, struct hash_table* s, struct node_t* pNode) {
 
 
 //return position of current page in the list
-struct node_t* hash_page_position (int page, struct hash_table s) {
-	return s.table[hash_func(page, s)];
+struct node_t* hash_page_position (int page, struct hash_table *s) {
+	return s->table[hash_func(page, *s)];
 }
 
 // delete this page from hash table

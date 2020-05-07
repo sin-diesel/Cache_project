@@ -37,4 +37,4 @@ void hash_delete_elem (int page, struct hash_table* s);
 void hash_free (struct hash_table* s); 
  
 //return position of current page in the list
-struct node_t* hash_page_position (int page, struct hash_table s);
+struct node_t* hash_page_position (int page, struct hash_table *s);
