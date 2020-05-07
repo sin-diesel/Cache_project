@@ -39,13 +39,18 @@ int handle_page(struct cache_t* cache, int page) {
 	int page_hash = hash_func(page, 10000000);
 
 	if (result != -1) {
-		fprintf(stderr, "Okay hit in: %d %s\n", __LINE__, __func__);	
+		fprintf(stderr, "		Okay hit with page %d before swap in: %d %s\n", page, __LINE__, __func__);	
 		cache->elements_ctr++;
+		Print_List_Front(main_mem);
 		Move_Elem_Hash(main_mem, page_hash);
-		fprintf(stderr, "Okay in: %d %s\n",  __LINE__, __func__);
+		fprintf(stderr, "		Okay hit with page %d after swap in: %d %s\n", page, __LINE__, __func__);	
+		Print_List_Front(main_mem);
 	} else {
-		fprintf(stderr, "Okay miss in: %d %s\n", __LINE__, __func__);
+		fprintf(stderr, "Okay miss with page before push %d in: %d %s\n", page, __LINE__, __func__);
+		Print_List_Front(main_mem);
 		Push_Front(main_mem, page, page_hash);
+		fprintf(stderr, "Okay miss with page after push %d in: %d %s\n", page, __LINE__, __func__);
+		Print_List_Front(main_mem);
 	}
 
 
