@@ -14,7 +14,7 @@ int hash_func (int page, struct hash_table s) {
 	return hash;
 }
 
-// create hash table according to list
+// create hash table with size=capacity (capacity >> list_size)
 struct hash_table* hash_init (int capacity) {
 	struct hash_table* s;
 	s = (struct hash_table*) calloc (1, sizeof (struct hash_table));
@@ -28,7 +28,7 @@ struct hash_table* hash_init (int capacity) {
 
 // check if the page in hash table (Cache) (ret 1 if yes, 0 - vice verse)
 char hash_check_elem (int page, struct hash_table s) {
-	int hash_page = hash_func (page, s.capacity);
+	int hash_page = hash_func (page, s);
 	return (s.table[hash_page] != NULL);
 }
 
@@ -39,7 +39,7 @@ void hash_add_elem (int page, struct hash_table* s, struct node_t* pNode) {
 	if (hash_check_elem (page, *s) == 1)
 		return;
 
-	int hash_page = hash_func (page, s->capacity);
+	int hash_page = hash_func (page, *s);
 
 	s->table[hash_page] = pNode;
 }
@@ -55,7 +55,7 @@ void hash_delete_elem (int page, struct hash_table* s) {
 	if (hash_check_elem (page, *s) == 0)
 		return;
 	
-	int hash_page = hash_func (page, s->capacity);
+	int hash_page = hash_func (page, *s);
 
 	s->table[hash_page] = NULL;
 }

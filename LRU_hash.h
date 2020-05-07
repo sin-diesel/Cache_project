@@ -5,6 +5,13 @@
 #include <assert.h>
 
 
+struct node_t{
+    struct node_t* next;
+    struct node_t* prev;
+    int hash;
+    int page; // page number
+};
+
 struct hash_table
 {
 	struct node_t **table;
