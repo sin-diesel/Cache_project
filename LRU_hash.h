@@ -12,10 +12,10 @@ struct hash_table
 };
 
 // return hash of the page
-int hash_func (int page, int mod);
+int hash_func (int page, struct hash_table s);
 
-// create hash table according to list
-struct hash_table* hash_init (int capacity);
+// create hash table with size = capacity (capacity >> list_size)
+struct hash_table* hash_init (int capacity); 
 
 // check if the page in hash table (ret 1 if yes, 0 - vice verse)
 char hash_check_elem (int page, struct hash_table s);
