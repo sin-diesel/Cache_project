@@ -60,7 +60,7 @@ struct hash_node_t* hash_create_node (int page, struct node_t *list_node_t, stru
 struct hash_node_t* hash_find_page (int page, struct hash_table s);
 
 // create hash table with size = capacity (capacity >> list_size)
-struct hash_table* hash_init (int capacity); 
+struct hash_table* hash_init (int capacity);
 
 // check if the page in hash table (so that in cache too) (ret 1 if yes, 0 - vice verse)
 char hash_check_elem (int page, struct hash_table s);
@@ -76,7 +76,7 @@ void hash_free (struct hash_table* s);
 
 // free branch of hash
 void hash_free_branch (struct hash_node_t* top);
- 
+
 //return position of current page in the list
 struct node_t* hash_page_position (int page, struct hash_table *s);
 
@@ -215,13 +215,12 @@ void hash_delete_elem (int page, struct hash_table* s) {
 
 //free branch of hash
 void hash_free_branch (struct hash_node_t* top) {
-	if (top == NULL)
-		return;
-
-	if (top->next == NULL){
-		free (top);
-		return;
-	}
+    if (top == NULL)
+        return;
+    if (top->next == NULL) { 
+        free (top);
+        return;
+    }
 
 	hash_free_branch (top->next);
 }
@@ -490,12 +489,12 @@ struct cache_t cache_init(int main_size) {
     assert(main_size >= 0);
 
 
-    hash_capacity = main_size * 1000;
-    
+    hash_capacity = main_size * 17;
+
     cache = (struct cache_t*) calloc(1, sizeof(struct cache_t));
     assert(cache);
 
-    hash_capacity = max_page; // needs testing
+
     cache->main_mem.hash = *(hash_init(hash_capacity));
     assert(&(cache->main_mem.hash));
 
@@ -517,7 +516,6 @@ int handle_page(struct cache_t* cache, int page) {
 
 
     result = hash_check_elem(page, cache->main_mem.hash);
-
     if (result != 0) {   
         cache->elements_ctr++;
         Move_Elem_Page(main_pages, page);
@@ -603,8 +601,6 @@ int main () {
             ++misses;
         }
     }
-
     fprintf(stdout, "%d", hits);
-
-	return 0;
+    return 0;
 }
