@@ -56,5 +56,8 @@ void Print_List_Front(struct list_t* list);
 //print list from the back
 void Print_List_Back(struct list_t* list);
 
+//Send to main , delete in out
+void Send_to_Main(struct list_t* out, struct list_t* main, int page);
+
 //Assert List
 void Assert_List(struct list_t* list);
