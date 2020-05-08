@@ -103,18 +103,18 @@ int handle_page(struct cache_t* cache, int page) {
 	//int page_hash = hash_func(page, 10000000);
 
 	if (result != 0) {
-		fprintf(stderr, "\tOkay hit with page %d before swap in: %d %s\n", page, __LINE__, __func__);	
+	//	fprintf(stderr, "\tOkay hit with page %d before swap in: %d %s\n", page, __LINE__, __func__);	
 		cache->elements_ctr++;
-		Print_List_Front(main_pages);
+	//	Print_List_Front(main_pages);
 		Move_Elem_Page(main_pages, page);
-		fprintf(stderr, "\tOkay hit with page %d after swap in: %d %s\n", page, __LINE__, __func__);	
-		Print_List_Front(main_pages);
+	//	fprintf(stderr, "\tOkay hit with page %d after swap in: %d %s\n", page, __LINE__, __func__);	
+		//Print_List_Front(main_pages);
 	} else {
-		fprintf(stderr, "Okay miss with page before push %d in: %d %s\n", page, __LINE__, __func__);
-		Print_List_Front(main_pages);
+	//	fprintf(stderr, "Okay miss with page before push %d in: %d %s\n", page, __LINE__, __func__);
+		//Print_List_Front(main_pages);
 		Push_Front(main_pages, page);
-		fprintf(stderr, "Okay miss with page after push %d in: %d %s\n", page, __LINE__, __func__);
-		Print_List_Front(main_pages);
+		//fprintf(stderr, "Okay miss with page after push %d in: %d %s\n", page, __LINE__, __func__);
+		//Print_List_Front(main_pages);
 	}
 
 
@@ -196,7 +196,7 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 		}
 	}
 
-	fprintf(stdout, "Hits: %d\n Misses: %d\n", hits, misses);
+	fprintf(stdout, "Hits: %d\n Misses: %d\n Hit rate: %.2f %%", hits, misses, 1.0 * hits / misses);
  }
 
  void run_tests_2q(struct cache2q_t* cache, FILE* data_source) { /* with stdout for now */

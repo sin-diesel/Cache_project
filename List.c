@@ -93,7 +93,7 @@ void Push_Back(struct list_t* list, int page)
 
 void Push_Front(struct list_t* list, int page)
 {
-    Print_List_Back(list);
+  //  Print_List_Back(list);
     if (Is_Empty(list))
     {
         printf("ERROR: list void");

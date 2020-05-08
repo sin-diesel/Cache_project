@@ -4,7 +4,7 @@
 #include "List.h"
 #include "cache.h"
 
-#define TWOQ
+#define LRU
 
 
 int main () {
@@ -25,6 +25,8 @@ int main () {
 
 	#endif
 
+	#ifdef TWOQ
+
 	int main_size = 4;
 	int in_size = 2;
 	int out_size = 3;
@@ -38,6 +40,7 @@ int main () {
     system ("./tests");/* questionable */
 
 	//run_tests_2q(&cache2q, tests);
+	#endif
 
 	return 0;
 }
