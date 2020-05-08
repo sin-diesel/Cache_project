@@ -22,7 +22,7 @@ struct hash_table
 
 // return hash of the page (hash < size of hash table)
 int hash_func (int page, struct hash_table s) {
-	int hash = (((page < 0) ? -page : page) % s.capacity) * 19 % s.capacity;
+	int hash = ((page < 0) ? -page : page) % s.capacity;
 	return hash;
 }
 
@@ -117,6 +117,7 @@ struct node_t* hash_page_position (int page, struct hash_table *s) {
 // delete this page from hash table
 void hash_delete_elem (int page, struct hash_table* s) {
 	struct hash_node_t* h_node;
+	struct hash_node_t* h_node_next;
 
 	if (hash_check_elem (page, *s) == 0)
 		return;
@@ -130,10 +131,15 @@ void hash_delete_elem (int page, struct hash_table* s) {
 			return;
 		}
 		
+		h_node_next = h_node->next;
 		*h_node = *(h_node->next);
 		h_node->prev = NULL;
-		free(h_node->next->prev);
-		h_node->next->prev = h_node;
+		
+		free(h_node_next);
+		
+		if (h_node->next != NULL)
+			h_node->next->prev = h_node;
+		
 		return;
 	}
 
