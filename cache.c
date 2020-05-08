@@ -9,17 +9,17 @@
 
 struct cache_t cache_init(int main_size) {
 
-	//int capacity = ? We should try several different values (f.e. 5 * m_size, 7 * m_size, etc.)
 	assert(main_size >= 0);
 
 	struct cache_t* cache = (struct cache_t*) calloc(1, sizeof(struct cache_t));
 	assert(cache);
 
-	cache->main_hash = *(hash_init(/*capacity*/));
-	assert(&(cache->main_hash));
+	int hash_capacity = main_size * 100000; // needs testing
+	cache->main_mem.hash = *(hash_init(hash_capacity));
+	assert(&(cache->main_mem.hash));
 
-	cache->main_mem = *(Init_List(main_size, &(cache->main_hash)));
-	assert(&(cache->main_mem));
+	cache->main_mem.pages = *(Init_List(main_size, &(cache->main_mem.hash)));
+	assert(&(cache->main_mem.hash));
 
 	cache->main_mem_size = main_size;
 
@@ -32,26 +32,26 @@ int handle_page(struct cache_t* cache, int page) {
 
 	char result = 0;
 
-	struct list_t* main_mem = &(cache->main_mem);
-	struct hash_table* main_hash = &(cache->main_hash);
+	struct list_t* main_pages = &(cache->main_mem.pages);
+	struct hash_table* main_hash = &(cache->main_mem.hash);
 
 
-	result = Hash_with_Page(main_mem, page);
-	int page_hash = hash_func(page, 10000000);
+	result = hash_check_elem(page, cache->main_mem.hash);
+	//int page_hash = hash_func(page, 10000000);
 
-	if (result != -1) {
-		fprintf(stderr, "		Okay hit with page %d before swap in: %d %s\n", page, __LINE__, __func__);	
+	if (result != 0) {
+		fprintf(stderr, "\tOkay hit with page %d before swap in: %d %s\n", page, __LINE__, __func__);	
 		cache->elements_ctr++;
-		Print_List_Front(main_mem);
-		Move_Elem_Hash(main_mem, page_hash);
-		fprintf(stderr, "		Okay hit with page %d after swap in: %d %s\n", page, __LINE__, __func__);	
-		Print_List_Front(main_mem);
+		Print_List_Front(main_pages);
+		Move_Elem_Page(main_pages, page);
+		fprintf(stderr, "\tOkay hit with page %d after swap in: %d %s\n", page, __LINE__, __func__);	
+		Print_List_Front(main_pages);
 	} else {
 		fprintf(stderr, "Okay miss with page before push %d in: %d %s\n", page, __LINE__, __func__);
-		Print_List_Front(main_mem);
-		Push_Front(main_mem, page, page_hash);
+		Print_List_Front(main_pages);
+		Push_Front(main_pages, page);
 		fprintf(stderr, "Okay miss with page after push %d in: %d %s\n", page, __LINE__, __func__);
-		Print_List_Front(main_mem);
+		Print_List_Front(main_pages);
 	}
 
 
@@ -73,11 +73,12 @@ void cache_delete(struct cache_t* cache) {
 
 	assert(cache);
 
-	struct list_t* main_mem = &(cache->main_mem);
-	struct hash_table* main_hash = &(cache->main_hash);
+	struct list_t* main_pages = &(cache->main_mem.pages);
+	struct hash_table* main_hash = &(cache->main_mem.hash);
 
-	Free_List(main_mem); //first delete hash then list
+
 	hash_free(main_hash);
+	Free_List(main_pages);
 
 	free(cache);
 }
@@ -94,7 +95,7 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 
 	while (fscanf(data_source, "%d ", &page) == 1) {
 		res = handle_page(cache, page);
-		if (res != -1) {
+		if (res != 0) {
 			++hits;
 		} else {
 			++misses;

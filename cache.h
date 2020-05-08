@@ -2,10 +2,14 @@
 #include "LRU_hash.h"
 #include "List.h"
 
+struct memory_t { /* main memory list + hash */
+	struct list_t pages;
+	struct hash_table hash;
+};
+
 struct cache_t { /* cache data structure */
 
-	struct list_t main_mem; /* main memory list + hash */
-	struct hash_table main_hash;
+	struct memory_t main_mem;
 	unsigned main_mem_size;
 
 	unsigned elements_ctr; /* elements counter */

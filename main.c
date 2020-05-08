@@ -7,13 +7,15 @@
 
 int main () {
 
-	int main_size = 4;
+	int main_size = 30;
 
 	struct cache_t cache = cache_init(main_size);
-	//fprintf(stderr, "Okay in: %d %s\n", __LINE__, __func__);
 
 	FILE* tests = fopen("tests.txt", "r");
     assert(tests);
+
+    system("make -f Makefile_tests.txt all");
+    system ("./tests");/* questionable */
 
 	run_tests(&cache, tests);
 

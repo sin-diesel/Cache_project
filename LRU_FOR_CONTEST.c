@@ -22,15 +22,18 @@ struct list_t {
     int size;
 };
 
-struct cache_t { /* cache data structure */
-
-	struct list_t main_mem; /* main memory list + hash */
-	struct hash_table main_hash;
-	unsigned main_mem_size;
-
-	unsigned elements_ctr; /* elements counter */
+struct memory_t { /* main memory list + hash */
+    struct list_t pages;
+    struct hash_table hash;
 };
 
+struct cache_t { /* cache data structure */
+
+    struct memory_t main_mem;
+    unsigned main_mem_size;
+
+    unsigned elements_ctr; /* elements counter */
+};
 
 
 
@@ -362,13 +365,13 @@ static struct node_t* Create_Node()
 
 ///////////////CAAAAAAAAAAAAAAAAAACHE
 
-struct cache_t* cache_init(int main_size); /* initilizes cache */
+struct cache_t cache_init(int main_size); /* initilizes cache */
 
 int handle_page(struct cache_t* cache, int page); /* page handler, returns -1 if miss and page hash if hit*/
 
 void cache_delete(struct cache_t* cache); /* deletes cache */
 
-void run_tests(struct cache_t* cache, int* arr, int arr_size); /* test program */
+void run_tests(struct cache_t* cache, FILE* data_source); /* test program */
 
 
 
@@ -376,64 +379,87 @@ void run_tests(struct cache_t* cache, int* arr, int arr_size); /* test program *
 
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-struct cache_t* cache_init(int main_size) {
+struct cache_t cache_init(int main_size) {
 
-	int capacity;
-	struct cache_t* cache;
+    struct cache_t* cache = NULL;
+    int max_page = 7000000;
+    int hash_capacity = 0;
+    assert(main_size >= 0);
 
-	assert(main_size >= 0);
 
-	capacity = 100 * main_size;
+    cache = (struct cache_t*) calloc(1, sizeof(struct cache_t));
+    assert(cache);
 
-	cache = (struct cache_t*) calloc(1, sizeof(struct cache_t));
-	assert(cache);
+    hash_capacity = max_page; // needs testing
+    cache->main_mem.hash = *(hash_init(hash_capacity));
+    assert(&(cache->main_mem.hash));
 
-	cache->main_hash = *(hash_init(capacity));
-	assert(&(cache->main_hash));
+    cache->main_mem.pages = *(Init_List(main_size, &(cache->main_mem.hash)));
+    assert(&(cache->main_mem.hash));
 
-	cache->main_mem = *(Init_List(main_size, &(cache->main_hash)));
-	assert(&(cache->main_mem));
+    cache->main_mem_size = main_size;
 
-	cache->main_mem_size = main_size;
+    cache->elements_ctr = 0;
 
-	cache->elements_ctr = 0;
-
-	return cache;
+    return *cache;
 }
 
 int handle_page(struct cache_t* cache, int page) {
-	int res;
-	
-	if ((res = hash_check_elem (page, cache->main_hash)) == 0)
-		Push_Front (&cache->main_mem, page);
-	else
-		Move_Elem_Page (&cache->main_mem, page);
 
-	return res;
+    char result = 0;
+
+    struct list_t* main_pages = &(cache->main_mem.pages);
+
+
+    result = hash_check_elem(page, cache->main_mem.hash);
+
+    if (result != 0) {   
+        cache->elements_ctr++;
+        Move_Elem_Page(main_pages, page);
+    } else {
+        Push_Front(main_pages, page);
+    }
+
+    return result;
 }
+
 
 
 void cache_delete(struct cache_t* cache) {
 
-	struct list_t* main_mem = &(cache->main_mem);
-	struct hash_table* main_hash = &(cache->main_hash);
+    struct list_t* main_pages;
+    struct hash_table* main_hash;
+    assert(cache);
 
-	assert(cache);
+    main_pages = &(cache->main_mem.pages);
+    main_hash = &(cache->main_mem.hash);
 
-	hash_free(main_hash);
-	Free_List(main_mem);
 
-	free(cache);
+    hash_free(main_hash);
+    Free_List(main_pages);
+
+    free(cache);
 }
 
-void run_tests(struct cache_t* cache, int *arr, int arr_size) {
-	int hits = 0;
-	int n = 0;
+void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for now */
 
-	for (n = 0; n < arr_size; ++n)
-		hits += handle_page(cache, arr[n]);
+    int page = 0;
+    int hits = 0;
+    int misses = 0;
+    int res = 0;
 
-	printf("%d\n", hits);
+    assert(cache);
+    assert(data_source);
+
+    while (fscanf(data_source, "%d ", &page) == 1) {
+        res = handle_page(cache, page);
+        if (res != 0) {
+            ++hits;
+        } else {
+            ++misses;
+        }
+    }
+    fprintf(stdout, "Hits: %d\n Misses: %d\n", hits, misses);
 }
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -444,22 +470,36 @@ void run_tests(struct cache_t* cache, int *arr, int arr_size) {
 
 int main () {
 
-	int main_size, i, arr_size, *arr;
+    int main_size = 0;
+    int elem_ctr = 0;
+    int res = 0;
+    int page = 0;
+    int hits = 0;
+    int misses = 0;
+    struct cache_t cache;
 
-	struct cache_t* cache;
+    scanf("%d ", &main_size);
 
-	scanf ("%d %d", &main_size, &arr_size);
+    assert(main_size >= 0);
 
-	arr = (int*) calloc (arr_size, sizeof (int));
+    scanf("%d ", &elem_ctr);
 
-	for (i = 0; i < arr_size; ++i)
-		scanf ("%d", &arr[i]);
+    assert(elem_ctr >= 0);
+    
 
-	cache = cache_init(main_size);
+    cache = cache_init(main_size);
 
-	run_tests(cache, arr, arr_size);
+    for (int i = 0; i < elem_ctr; ++i) {
+        scanf("%d ", &page);
+        res = handle_page(&cache, page);
+        if (res != 0) {
+            ++hits;
+        } else {
+            ++misses;
+        }
+    }
 
-	//cache_delete (cache);
+    fprintf(stdout, "%d", hits);
 
 	return 0;
 }

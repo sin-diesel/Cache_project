@@ -6,11 +6,11 @@
 #include <math.h>
 #include "LRU_hash.h"
 
-struct node_t{
-    struct node_t* next;
-    struct node_t* prev;
-    int page;
-};
+// struct node_t{
+//     struct node_t* next;
+//     struct node_t* prev;
+//     int page;
+// };
 
 struct list_t{
     struct node_t* front_elem;
