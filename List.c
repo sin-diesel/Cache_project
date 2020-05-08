@@ -207,6 +207,30 @@ static struct node_t* Create_Node()
     return node;
 }
 
+void Send_to_Main(struct list_t* out, struct list_t* main, int page)
+{
+    assert(out);
+    assert(main);
+    Push_Front(main, page);
+    struct node_t* node = hash_page_position(page, out->hashTable);
+    if(node == out->front_elem)
+    {
+        Push_Back(out, NAN);
+        return;
+    }
+    if(node == out->back_elem)
+    {
+        out->back_elem->page = NAN;
+        return;
+    }
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+    node->prev = out->back_elem;
+    node->next = NULL;
+    out->back_elem = node;
+    node->page = NAN;
+    return;
+}
 
 void Assert_List(struct list_t* list)
 {
