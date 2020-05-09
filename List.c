@@ -226,6 +226,7 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
     node->prev->next = node->next;
     node->next->prev = node->prev;
     node->prev = out->back_elem;
+    out->back_elem->next = node;
     node->next = NULL;
     out->back_elem = node;
     node->page = NAN;
