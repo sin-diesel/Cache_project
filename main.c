@@ -4,14 +4,14 @@
 #include "List.h"
 #include "cache.h"
 
-#define TWOQ  
+#define TWOQ
 
 
 int main () {
 
 	#ifdef LRU
 
-	int main_size = 12;
+	int main_size = 100;
 
 	struct cache_t cache = cache_init(main_size);
 
@@ -27,9 +27,10 @@ int main () {
 
 	#ifdef TWOQ
 
-	int main_size = 3;
-	int in_size = 3;
-	int out_size = 6;
+	int cache_size = 100;
+	int out_size = cache_size * 0.5;
+	int in_size = cache_size * 0.25;
+	int main_size = cache_size - in_size - out_size;
 
 	struct cache2q_t cache2q = cache2q_init(main_size, in_size, out_size);
 

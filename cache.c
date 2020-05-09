@@ -59,6 +59,7 @@ struct cache2q_t cache2q_init(int main_size, int in_size, int out_size) {
 	cache->main_size = main_size;
 	cache->in_size = in_size;
 	cache->out_size = out_size;
+	cache->cache_size = main_size + in_size + out_size;
 
 	cache->main_elem_ctr = 0;
 	cache->in_elem_ctr = 0;
@@ -141,25 +142,34 @@ int handle_page_2q(struct cache2q_t* cache, int page) {
 		result_out = hash_check_elem(page, cache->out_mem.hash);
 		result_in = hash_check_elem(page, cache->in_mem.hash);
 
-		// fprintf(stderr, "out result: %d \n", result_out);
+		// fprintf(stderr, "out page: %d \n", page);
 		// fprintf(stderr, "in result: %d \n", result_in);
 
 		if (result_out == 1) {
 			///todo
 			//fprintf(stderr, "out result: %d \n", result_out);
-			//Send_to_Main(out_pages, main_pages, page);
+			Send_to_Main(out_pages, main_pages, page);
 		} else if (result_in == 1) {
 			//fprintf(stderr, "in result: %d \n", result_in);
 			Move_Elem_Page(in_pages, page);
 			//Print_List_Front(in_pages);
 		} else {
-			fprintf(stderr, " out List before pushing elem to in:");
-			Print_List_Front(out_pages);
+			//fprintf(stderr, " out List before pushing elem to in:");
+		//	Print_List_Front(out_pages);
 			Exchange_Elem(in_pages, out_pages, page);
-			fprintf(stderr, " out List after pushing elem to in:");
-			Print_List_Front(out_pages);
+			//fprintf(stderr, " out List after pushing elem to in:");
+			//Print_List_Front(out_pages);
 		}
 	} else {
+		fprintf(stderr, "hit page: %d \n", page);
+
+		fprintf(stderr, "main list\n");
+		Print_List_Front(main_pages);
+		fprintf(stderr, "in list\n");
+		Print_List_Front(in_pages);
+		fprintf(stderr, "out list\n");
+		Print_List_Front(out_pages);
+		fprintf(stderr, "\n\n");
 		Move_Elem_Page(main_pages, page);
 	}
 
@@ -201,6 +211,9 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 	int misses = 0;
 	int res = 0;
 
+	FILE* results = fopen("results.txt", "a+"); /* file for representing results */
+	assert(results);
+
 	while (fscanf(data_source, "%d ", &page) == 1) {
 		res = handle_page(cache, page);
 		if (res != 0) {
@@ -210,8 +223,11 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 		}
 	}
 
-	fprintf(stdout, "Hits: %d\n Misses: %d\n Hit rate: %.2f %%", hits, misses, 1.0 * hits / misses);
- }
+	double hit_rate = 100 * 1.0 * hits / (hits + misses);
+
+	fprintf(stdout, "LRU: Hits: %d\n Misses: %d\n Hit rate: %.2f %%", hits, misses, hit_rate);
+	fprintf(results, "%u %f\n", cache->main_mem_size, hit_rate); /* for LRU */
+}
 
  void run_tests_2q(struct cache2q_t* cache, FILE* data_source) { /* with stdout for now */
 
@@ -223,6 +239,9 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 	int misses = 0;
 	int res = 0;
 
+	FILE* results = fopen("results.txt", "a+"); /* file for representing results */
+	assert(results);
+
 	while (fscanf(data_source, "%d ", &page) == 1) {
 		res = handle_page_2q(cache, page);
 		if (res != 0) {
@@ -232,7 +251,10 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 		}
 	}
 
-	fprintf(stdout, "Hits: %d\n Misses: %d\n Hit rate: %.2f %%", hits, misses, 1.0 * hits / misses);
+	double hit_rate = 100 * 1.0 * hits / (hits + misses);
+
+	fprintf(stdout, "2Q: Hits: %d\n Misses: %d\n Hit rate: %.2f %%", hits, misses, hit_rate);
+	fprintf(results, "%u %f\n", cache->cache_size, hit_rate); /* for 2Q */
  }
 
 /*

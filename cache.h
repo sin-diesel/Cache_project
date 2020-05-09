@@ -29,6 +29,7 @@ struct cache2q_t {
 	unsigned out_mem_size;
 	unsigned out_elem_ctr;
 
+	unsigned cache_size;
 	unsigned main_size;
 	unsigned in_size;
 	unsigned out_size;
