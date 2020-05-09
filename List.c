@@ -215,12 +215,12 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
     struct node_t* node = hash_page_position(page, out->hashTable);
     if(node == out->front_elem)
     {
-        Push_Back(out, NAN);
+        Push_Back(out, -1);
         return;
     }
     if(node == out->back_elem)
     {
-        out->back_elem->page = NAN;
+        out->back_elem->page = -1;
         return;
     }
     node->prev->next = node->next;
@@ -229,7 +229,7 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
     out->back_elem->next = node;
     node->next = NULL;
     out->back_elem = node;
-    node->page = NAN;
+    node->page = -1;
     return;
 }
 
