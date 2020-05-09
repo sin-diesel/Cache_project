@@ -4,14 +4,14 @@
 #include "List.h"
 #include "cache.h"
 
-#define LRU
+#define TWOQ
 
 
 int main () {
 
 	#ifdef LRU
 
-	int main_size = 30;
+	int main_size = 12;
 
 	struct cache_t cache = cache_init(main_size);
 
@@ -27,9 +27,9 @@ int main () {
 
 	#ifdef TWOQ
 
-	int main_size = 4;
-	int in_size = 2;
-	int out_size = 3;
+	int main_size = 3;
+	int in_size = 3;
+	int out_size = 6;
 
 	struct cache2q_t cache2q = cache2q_init(main_size, in_size, out_size);
 
@@ -39,7 +39,7 @@ int main () {
     system("make -f Makefile_tests.txt all");
     system ("./tests");/* questionable */
 
-	//run_tests_2q(&cache2q, tests);
+	run_tests_2q(&cache2q, tests);
 	#endif
 
 	return 0;

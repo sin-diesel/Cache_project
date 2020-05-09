@@ -56,9 +56,9 @@ struct cache2q_t cache2q_init(int main_size, int in_size, int out_size) {
 	cache->out_mem.pages = *(Init_List(main_size, &(cache->out_mem.hash)));
 	assert(&(cache->out_mem.hash));
 
-	cache->main_mem_size = main_size;
-	cache->in_mem_size = in_size;
-	cache->out_mem_size = out_size;
+	cache->main_size = main_size;
+	cache->in_size = in_size;
+	cache->out_size = out_size;
 
 	cache->main_elem_ctr = 0;
 	cache->in_elem_ctr = 0;
@@ -124,7 +124,7 @@ int handle_page(struct cache_t* cache, int page) {
 int handle_page_2q(struct cache2q_t* cache, int page) {
 
 	char result_main = 0;
-	//char result_in = 0;
+	char result_in = 0;
 	char result_out = 0;
 
 	struct list_t* main_pages = &(cache->main_mem.pages);
@@ -134,16 +134,31 @@ int handle_page_2q(struct cache2q_t* cache, int page) {
 
 	result_main = hash_check_elem(page, cache->main_mem.hash);
 	//int page_hash = hash_func(page, 10000000);
+	//fprintf(stderr, "main result: %d \n", result_main);
 
 	if (result_main == 0) { // not in the main memory
 
 		result_out = hash_check_elem(page, cache->out_mem.hash);
-		if (result_out == 1) {
-			Push_Front(main_pages, page);
-		} else {
-			Exchange_Elem(in_pages, out_pages, page);
-		}	
+		result_in = hash_check_elem(page, cache->in_mem.hash);
 
+		// fprintf(stderr, "out result: %d \n", result_out);
+		// fprintf(stderr, "in result: %d \n", result_in);
+
+		if (result_out == 1) {
+			///todo
+			//fprintf(stderr, "out result: %d \n", result_out);
+			//Send_to_Main(out_pages, main_pages, page);
+		} else if (result_in == 1) {
+			//fprintf(stderr, "in result: %d \n", result_in);
+			Move_Elem_Page(in_pages, page);
+			//Print_List_Front(in_pages);
+		} else {
+			fprintf(stderr, " out List before pushing elem to in:");
+			Print_List_Front(out_pages);
+			Exchange_Elem(in_pages, out_pages, page);
+			fprintf(stderr, " out List after pushing elem to in:");
+			Print_List_Front(out_pages);
+		}
 	} else {
 		Move_Elem_Page(main_pages, page);
 	}
@@ -151,7 +166,6 @@ int handle_page_2q(struct cache2q_t* cache, int page) {
 
 	return result_main; // fix due to result having unclear interpretation
 }
-
 /*
 int handle_page(struct cache_t* cache, int page) {
 	int res;
@@ -218,7 +232,7 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 		}
 	}
 
-	fprintf(stdout, "Hits: %d\n Misses: %d\n", hits, misses);
+	fprintf(stdout, "Hits: %d\n Misses: %d\n Hit rate: %.2f %%", hits, misses, 1.0 * hits / misses);
  }
 
 /*

@@ -28,6 +28,10 @@ struct cache2q_t {
 	struct memory_t out_mem;
 	unsigned out_mem_size;
 	unsigned out_elem_ctr;
+
+	unsigned main_size;
+	unsigned in_size;
+	unsigned out_size;
 };
 
 struct cache2q_t cache2q_init(int main_size, int in_size, int out_size); /* initialize 2qCache */

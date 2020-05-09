@@ -5,7 +5,7 @@
 
 int main() {
 
-	int iterations = 10000;
+	int iterations = 1000;
 	FILE* out_file = fopen("tests.txt", "w");
 	assert(out_file);
 	generate_nums(iterations, out_file);
