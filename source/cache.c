@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
-#include "cache.h"
-#include "List.h"
-#include "LRU_hash.h"
+#include "../include/cache.h"
+#include "../include/List.h"
+#include "../include/LRU_hash.h"
 #include <assert.h>
 
 

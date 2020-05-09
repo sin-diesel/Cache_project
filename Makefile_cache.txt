@@ -4,25 +4,25 @@ SOURCES = сache.c LRU_hash.c List.c main.c
 HEADERS = cache.h LRU_hash.h List.h
 OBJECTS = $(SOURCES:.c=.o)
 
-cache.o: cache.c cache.h
-	$(CC) $(CFLAGS) cache.c -c -o cache.o
+cache.o: source/cache.c include/cache.h
+	$(CC) $(CFLAGS) source/cache.c -c -o object/cache.o
 
-LRU_hash.o: LRU_hash.c LRU_hash.h
-	$(CC) $(CFLAGS) LRU_hash.c -c -o LRU_hash.o
+LRU_hash.o: source/LRU_hash.c include/LRU_hash.h
+	$(CC) $(CFLAGS) source/LRU_hash.c -c -o object/LRU_hash.o
 
-List.o: List.c List.h
-	$(CC) $(CFLAGS) List.c -c -o List.o
+List.o: source/List.c include/List.h
+	$(CC) $(CFLAGS) source/List.c -c -o object/List.o
 
 main.o: main.c
-	$(CC) $(CFLAGS) main.c -c -o main.o
+	$(CC) $(CFLAGS) main.c -c -o object/main.o
 
 .PHONY: all
 all: main.o List.o LRU_hash.o cache.o
-	$(CC) $(CFLAGS) main.o List.o LRU_hash.o cache.o -o main
+	$(CC) $(CFLAGS) object/main.o object/List.o object/LRU_hash.o object/cache.o -o main
 
 
 .PHONY: clean
 clean:
 	rm -r -f $(OBJECTS)
-	rm -f cache.o
+	rm -f object/cache.o
 	rm -f main

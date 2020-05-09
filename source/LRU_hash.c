@@ -1,8 +1,7 @@
-#include "LRU_hash.h"
+#include "../include/LRU_hash.h"
 
 
 /*
-
 struct hash_node_t
 {
 	struct node_t *list_node_t;

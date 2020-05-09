@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "LRU_hash.h"
-#include "List.h"
-#include "cache.h"
+#include "include/LRU_hash.h"
+#include "include/List.h"
+#include "include/cache.h"
 
 
 int main () {
