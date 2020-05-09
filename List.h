@@ -9,8 +9,8 @@
 struct node_t{
     struct node_t* next;
     struct node_t* prev;
-    int page;
-};
+    int page; 
+};  
 
 struct list_t{
     struct node_t* front_elem;

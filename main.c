@@ -4,7 +4,7 @@
 #include "List.h"
 #include "cache.h"
 
-#define TWOQ
+#define TWOQ  
 
 
 int main () {

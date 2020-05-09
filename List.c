@@ -3,7 +3,7 @@
 static struct node_t* Create_Node();
 
 struct list_t* Init_List(int size, struct hash_table* hashTable)
-{
+{  
     assert(hashTable);
     struct node_t* top = NULL;
     struct node_t* tmp = NULL;

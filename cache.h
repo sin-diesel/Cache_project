@@ -5,7 +5,7 @@
 struct memory_t { /* main memory list + hash */
 	struct list_t pages;
 	struct hash_table hash;
-};
+};  
 
 struct cache_t { /* cache data structure */
 

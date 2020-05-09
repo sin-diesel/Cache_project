@@ -131,7 +131,7 @@ int handle_page_2q(struct cache2q_t* cache, int page) {
 	struct list_t* in_pages = &(cache->in_mem.pages);
 	struct list_t* out_pages = &(cache->out_mem.pages);
 
-
+  
 	result_main = hash_check_elem(page, cache->main_mem.hash);
 	//int page_hash = hash_func(page, 10000000);
 	//fprintf(stderr, "main result: %d \n", result_main);
