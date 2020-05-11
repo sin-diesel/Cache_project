@@ -213,13 +213,13 @@ void run_tests(struct cache_t* cache, FILE* data_source) { /* with stdout for no
 
 	double hit_rate = 100 * 1.0 * hits / (hits + misses);
 
-	fprintf(stdout, "2Q: Hits: %d\n Misses: %d\n Hit rate: %.2f %%", hits, misses, hit_rate);
+	fprintf(stdout, "2Q: Hits: %d\n Misses: %d\n Hit rate: %.2f %%\n", hits, misses, hit_rate);
 	fprintf(results, "%u %f\n", cache->cache_size, hit_rate); /* for 2Q */
 }
 
 
 
-void cache_test(int main_size, int min_size, int max_size, int step) {
+void cache_test(int min_size, int max_size, int step) {
 
 
     for (int size = min_size; size < max_size; size += step) {
@@ -237,6 +237,24 @@ void cache_test(int main_size, int min_size, int max_size, int step) {
 
 }
 
+
+void cache_2q_test(int min_size, int max_size, int step) {
+
+
+    for (int size = min_size; size < max_size; size += step) {
+    	struct cache2q_t* cache = cache2q_init(size, size * 0.25, size * 0.5);
+
+    	system("make -f Makefile_tests.txt all");
+   		system ("./tests");/* questionable */
+   		FILE* tests = fopen("tests.txt", "r");
+   	    assert(tests);
+
+    	run_tests_2q(cache, tests);
+
+    	//cache_delete(cache);
+	}
+
+}
 
 
 

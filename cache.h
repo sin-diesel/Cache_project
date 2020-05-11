@@ -34,9 +34,9 @@ struct cache2q_t {
 
 
 
-void cache_test(int main_size, int min_size, int max_size, int step); /* check if cache is working fine */
+void cache_test(int min_size, int max_size, int step); /* check if cache is working fine */
 
-void cache_2q_test(int main_size, int in_size, int out_size, int min_size, int max_size, int step);
+void cache_2q_test(int min_size, int max_size, int step);
 
 struct cache2q_t* cache2q_init(int main_size, int in_size, int out_size); /* initialize 2qCache */
 
