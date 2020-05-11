@@ -156,12 +156,8 @@ void hash_free_branch (struct hash_node_t* top) {
 	if (top == NULL)
 		return;
 
-	if (top->next == NULL){
-		free (top);
-		return;
-	}
-
 	hash_free_branch (top->next);
+	free(top);
 }
 
 // free hash table
