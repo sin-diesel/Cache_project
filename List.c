@@ -28,18 +28,6 @@ struct list_t* Init_List(int size, struct hash_table* hashTable)
     return list;
 }
 
-struct node_t* Front_Elem(struct list_t* list)
-{
-    assert(list);
-    return list->front_elem;
-}
-
-struct node_t* Back_Elem(struct list_t* list)
-{
-    assert(list);
-    return list->back_elem;
-}
-
 char Is_Empty (struct list_t* list)
 {
     assert(list);
@@ -51,12 +39,6 @@ char Is_Empty (struct list_t* list)
         exit(1);
     }
     return 0;
-}
-
-size_t Size_List (struct list_t* list)
-{
-    assert(list);
-    return list->size;
 }
 
 void Push_Back(struct list_t* list, int page)
@@ -213,6 +195,8 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
     assert(main);
     Push_Front(main, page);
     struct node_t* node = hash_page_position(page, out->hashTable);
+    if (node != NULL)
+        return;
     if(node == out->front_elem)
     {
         Push_Back(out, -1);
@@ -236,12 +220,12 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
 void Assert_List(struct list_t* list)
 {
     Is_Empty(list);
-    if(list->front_elem->prev == NULL)
+    if(list->front_elem->prev != NULL)
     {
         fprintf(stderr, "ERROR List: There is pointer to the parent of the front node");
         exit(3);
     }
-    if(list->back_elem->next == NULL)
+    if(list->back_elem->next != NULL)
     {
         fprintf(stderr, "ERROR List: There is pointer to the child of the back node");
         exit(4);
@@ -259,6 +243,7 @@ void Assert_List(struct list_t* list)
             fprintf(stderr, "ERROR List: Node with page %d don't have prev node ptr", node->page);
             exit(6);
         }
+        node = node->next;
     }
 }
 
