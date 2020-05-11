@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+#define DEBAG
+
 struct node_t {
     struct node_t* next;
     struct node_t* prev;
@@ -552,7 +554,7 @@ struct cache_t* cache_init(int main_size) {
 
 	assert(main_size >= 0);
 
-	capacity = 11 * main_size;
+	capacity = main_size;
 
 	cache = (struct cache_t*) calloc(1, sizeof(struct cache_t));
 	assert(cache);

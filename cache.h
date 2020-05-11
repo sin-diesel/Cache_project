@@ -30,14 +30,17 @@ struct cache2q_t {
 	unsigned out_elem_ctr;
 
 	unsigned cache_size;
-	unsigned main_size;
-	unsigned in_size;
-	unsigned out_size;
 };
 
-struct cache2q_t cache2q_init(int main_size, int in_size, int out_size); /* initialize 2qCache */
 
-struct cache_t cache_init(int main_size); /* initilizes cache */
+
+void cache_test(int min_size, int max_size, int step); /* check if cache is working fine */
+
+void cache_2q_test(int min_size, int max_size, int step);
+
+struct cache2q_t* cache2q_init(int main_size, int in_size, int out_size); /* initialize 2qCache */
+
+struct cache_t* cache_init(int main_size); /* initilizes cache */
 
 int handle_page(struct cache_t* cache, int page); /* page handler, returns -1 if miss and page hash if hit*/
 

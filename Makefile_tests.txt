@@ -16,7 +16,6 @@ all: test_generator.o tests.o
 
 
 .PHONY: clean
-
 clean:
 	rm -r -f $(OBJECTS)
 	rm -f tests
