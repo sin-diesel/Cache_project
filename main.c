@@ -4,37 +4,31 @@
 #include "List.h"
 #include "cache.h"
 
-#define TWOQ
+#define LRU /* which version to use */
 
 
 int main () {
 
 	#ifdef LRU
 
-	int main_size = 100;
-
-	struct cache_t cache = cache_init(main_size);
-
-	FILE* tests = fopen("tests.txt", "r");
-    assert(tests);
-
-    system("make -f Makefile_tests.txt all");
-    system ("./tests");/* questionable */
-
-	run_tests(&cache, tests);
+	cache_test(100, 5, 200, 5); /* main_size min_page max_page step */
+	system("make -f Makefile_cache.txt clean");
+	//system("make -f Makefile_tests.txt сlean");
 
 	#endif
 
 	#ifdef TWOQ
 
-	int cache_size = 100;
-	int out_size = cache_size * 0.5;
-	int in_size = cache_size * 0.25;
-	int main_size = cache_size - in_size - out_size;
+	cache2q_test(100, 25, 50, 5, 200, 5) /* main_size in_size out_size min_size max_size step */
+
+	int cache_size = 5;
+	int out_size = 3;
+	int in_size = 2;
+	int main_size = cache_size;
 
 	struct cache2q_t cache2q = cache2q_init(main_size, in_size, out_size);
 
-	FILE* tests = fopen("tests.txt", "r");
+	FILE* tests = fopen("tests2.txt", "r");
     assert(tests);
 
     system("make -f Makefile_tests.txt all");
