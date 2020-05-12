@@ -193,10 +193,10 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
 {
     assert(out);
     assert(main);
-    Push_Front(main, page);
     struct node_t* node = hash_page_position(page, out->hashTable);
-    if (node != NULL)
+    if (node == NULL)
         return;
+    Push_Front(main, page);
     if(node == out->front_elem)
     {
         Push_Back(out, -1);
