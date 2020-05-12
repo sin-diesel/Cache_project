@@ -6,6 +6,8 @@
 #include "LRU_hash.h"
 #include <assert.h>
 
+#define DEBUG
+
 
 struct cache_t* cache_init(int main_size) {
 
@@ -125,8 +127,18 @@ int handle_page_2q(struct cache2q_t* cache, int page) {
 	struct list_t* in_pages = &(cache->in_mem.pages);
 	struct list_t* out_pages = &(cache->out_mem.pages);
 
-  
+ 	#ifdef DEBUG
 	result_main = hash_check_elem(page, cache->main_mem.hash);
+	fprintf(stderr, "Current page: %d\n", page);
+	fprintf(stderr, "Current cache state: \n");
+	fprintf(stderr, "Main: ");
+	Print_List_Front(main_pages);
+	fprintf(stderr, "In: ");
+	Print_List_Front(in_pages);
+	fprintf(stderr, "Out: ");
+	Print_List_Front(out_pages);
+	fprintf(stderr, "\n");
+	#endif
 
 	if (result_main == 0) { // not in the main memory
 
@@ -143,6 +155,17 @@ int handle_page_2q(struct cache2q_t* cache, int page) {
 	} else {
 		Move_Elem_Page(main_pages, page);
 	}
+	#ifdef DEBUG
+	fprintf(stderr, "Cache state after handling page: \n");
+	fprintf(stderr, "Main: ");
+	Print_List_Front(main_pages);
+	fprintf(stderr, "In: ");
+	Print_List_Front(in_pages);
+	fprintf(stderr, "Out: ");
+	Print_List_Front(out_pages);
+	(result_main == 1) ? fprintf(stderr, "hit \n") : fprintf(stderr, "miss \n");
+	fprintf(stderr, "\n\n\n");
+	#endif
 
 
 	return result_main; // fix due to result having unclear interpretation
@@ -240,6 +263,7 @@ void cache_test(int min_size, int max_size, int step) {
 
 void cache_2q_test(int min_size, int max_size, int step) {
 
+	#ifndef DEBUG
 
     for (int size = min_size; size < max_size; size += step) {
     	struct cache2q_t* cache = cache2q_init(size, size * 0.25, size * 0.5);
@@ -253,7 +277,15 @@ void cache_2q_test(int min_size, int max_size, int step) {
 
     	//cache_delete(cache);
 	}
+	#else 
 
+	FILE* tests = fopen("tests2.txt", "r"); /* additional tests*/
+	assert(tests);
+
+	struct cache2q_t* cache = cache2q_init(3, 2, 3);
+	run_tests_2q(cache, tests);
+
+	#endif
 }
 
 
