@@ -4,7 +4,7 @@
 #include "List.h"
 #include "cache.h"
 
-#define TWOQ /* which version to use */
+#define LRU /* which version to use */
 
 
 int main () {
