@@ -25,6 +25,7 @@ struct list_t* Init_List(int size, struct hash_table* hashTable)
     list->back_elem = tmp;
     list->hashTable = hashTable;
     assert(list->back_elem);
+    Fill_List(list, VOID);
     return list;
 }
 
@@ -35,7 +36,7 @@ char Is_Empty (struct list_t* list)
         return 1;
     if (list->size == 0 && (list->front_elem != NULL || list->back_elem != NULL))
     {
-        printf("ERROR : list size");
+        printf("ERROR : Is_Empty list size");
         exit(1);
     }
     return 0;
@@ -45,9 +46,10 @@ void Push_Back(struct list_t* list, int page)
 {
     if (Is_Empty(list))
     {
-        printf("ERROR: list void");
+        printf("ERROR: Push_Back : push in void");
         exit(2);
     }
+
     struct node_t* old_back = NULL;
     struct node_t* new_back = NULL;
     if (list->size == 1)
@@ -78,7 +80,7 @@ void Push_Front(struct list_t* list, int page)
   //  Print_List_Back(list);
     if (Is_Empty(list))
     {
-        printf("ERROR: list void");
+        printf("ERROR: Push_Front: push in void");
         exit(3);
     }
     struct node_t* old_front = NULL;
@@ -199,12 +201,12 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
     Push_Front(main, page);
     if(node == out->front_elem)
     {
-        Push_Back(out, -1);
+        Push_Back(out, VOID);
         return;
     }
     if(node == out->back_elem)
     {
-        out->back_elem->page = -1;
+        out->back_elem->page = VOID;
         return;
     }
     node->prev->next = node->next;
@@ -213,13 +215,14 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
     out->back_elem->next = node;
     node->next = NULL;
     out->back_elem = node;
-    node->page = -1;
+    node->page = VOID;
     return;
 }
 
 void Assert_List(struct list_t* list)
 {
-    Is_Empty(list);
+    if (Is_Empty(list))
+        return;
     if(list->front_elem->prev != NULL)
     {
         fprintf(stderr, "ERROR List: There is pointer to the parent of the front node");
@@ -247,3 +250,70 @@ void Assert_List(struct list_t* list)
     }
 }
 
+int* Create_ArrayByList(struct list_t* list){
+    Assert_List(list);
+    int* arr = (int*)calloc(Size_List(list), sizeof(int));
+    struct node_t* node = list->front_elem;
+    for (int i = 0; i < Size_List(list); ++i){
+        arr[i] = node->page;
+        node = node->next;
+    }
+    return arr;
+}
+
+struct list_t* Create_ListByArray(int* arr, int len){
+    struct hash_table* hashTable = hash_init(100 * len);
+    struct list_t* list = Init_List(len, hashTable);
+    for (int i = 0; i < len; ++i)
+        Push_Back(list, arr[i]);
+    return list;
+}
+
+void Resize_List(struct list_t* list, int newsize){
+    if (newsize < 0)
+    {
+        fprintf(stderr ,"ERROR LIST: Resize_List: newsize > 0");
+        exit(1);
+    }
+    if (newsize < Size_List(list)){
+        struct node_t* node = list->back_elem;
+        for (int i = 0; i < Size_List(list) - newsize; ++i){
+            if(node == list->front_elem){
+                free(node);
+                list->front_elem = NULL;
+                break;
+            }
+            node = node->prev;
+            hash_delete_elem(node->next->page, list->hashTable);
+            free(node->next);
+            node->next = NULL;
+        }
+        list->size = newsize;
+        list->back_elem = node;
+    }
+    if (newsize > Size_List(list)){
+        if (Size_List(list) == 0){
+            list->front_elem = Create_Node();
+            list->back_elem = list->front_elem;
+            list->size = 1;
+        }
+        struct node_t* node = list->back_elem;
+        for (int i = 0; i < newsize - Size_List(list); ++i){
+            node->next = Create_Node();
+            node = node->next;
+        }
+        list->size = newsize;
+        list->back_elem = node;
+    }
+}
+
+void Fill_List(struct list_t* list ,int val){
+    struct node_t* top = list->front_elem;
+    struct node_t* tmp = NULL;
+    while (top != NULL)
+    {
+        tmp = top->next;
+        top->page = val;
+        top = tmp;
+    }
+}
