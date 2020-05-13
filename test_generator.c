@@ -4,13 +4,16 @@
 #include <assert.h>
 #include "test_generator.h"
 
-void generate_nums(int iterations, FILE* stream) {
+void generate_nums(int cache_size, int npages, int max_page, FILE* stream) {
 
-	int const max_page_num = 1000;
 	srand(time(NULL));
 
-	for (int i = 0; i < iterations; ++i) {
-		int num = rand() % max_page_num;
+	//fprintf(stdout, "%d", cache_size);
+	fprintf(stream, "%d ", cache_size);
+	fprintf(stream, "%d\n", npages);
+
+	for (int i = 0; i < npages; ++i) {
+		int num = rand() % max_page;
 		assert(num >= 0);
 		fprintf(stream, "%d ", num);
 	}

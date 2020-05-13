@@ -6,6 +6,8 @@
 #include <math.h>
 #include "LRU_hash.h"
 
+enum {VOID = -1};
+
 struct node_t{
     struct node_t* next;
     struct node_t* prev;
@@ -61,3 +63,11 @@ void Print_List_Back(struct list_t* list);
 
 //Assert List
 void Assert_List(struct list_t* list);
+
+int* Create_ArrayByList(struct list_t* list);
+
+struct list_t* Create_ListByArray(int* arr, int len);
+
+void Resize_List(struct list_t* list, int newsize);
+
+void Fill_List(struct list_t* list ,int val);

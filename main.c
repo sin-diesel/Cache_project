@@ -11,7 +11,7 @@ int main () {
 
 	#ifdef LRU
 
-	cache_test(5, 200, 5); /* min_page max_page step */
+	cache_test();
 	system("make -f Makefile_cache.txt clean");
 	//system("make -f Makefile_tests.txt сlean");
 
@@ -19,7 +19,7 @@ int main () {
 
 	#ifdef TWOQ
 
-	cache_2q_test(5, 200, 5); /* min_size max_size step */
+	cache_2q_test();
 
 	#endif
 

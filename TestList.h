@@ -7,18 +7,14 @@
 #include "List.h"
 #include "LRU_hash.h"
 
-enum {
-    NUM_TESTS = 100,
-    HASH_CAPACITY = 1000000,
-    LIST_CAPACITY = 10
-};
-
 //test ALL
 void Test_All_List();
 
+//test func: List_Init
+void Test_Init();
+
 //test func: Push_Back & Push_Front
 void Test_Push();
-
 
 //test func: Exchange_Elem
 void Test_Exchange();
@@ -28,5 +24,9 @@ void Test_Move();
 
 //test func: Send_to_Main
 void Test_Send();
+
+char Comp_Array(int* arr1, int* arr2, int len1, int len2);
+
+void Print_Array(int* arr, int len);
 
 
