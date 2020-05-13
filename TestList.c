@@ -170,7 +170,7 @@ void Test_Send(){
         exit(7);
     }
     tmp = list1->front_elem;
-    for (int i = 0; i < Size_List(list1) - 2; ++i){
+    for (int i = 1; i < Size_List(list1) - 2; ++i){
         if (tmp->page != i ){
             Print_List_Front(list1);
             printf("[%d]", i);
