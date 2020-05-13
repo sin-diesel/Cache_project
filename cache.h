@@ -34,9 +34,9 @@ struct cache2q_t {
 
 
 
-void cache_test(int min_size, int max_size, int step); /* check if cache is working fine */
+void cache_test(); /* check if cache is working fine */
 
-void cache_2q_test(int min_size, int max_size, int step);
+void cache_2q_test();
 
 struct cache2q_t* cache2q_init(int main_size, int in_size, int out_size); /* initialize 2qCache */
 
@@ -48,6 +48,8 @@ int handle_page_2q(struct cache2q_t* cache, int page); /* page handler, returns 
 
 void cache_delete(struct cache_t* cache); /* deletes cache */
 
-void run_tests(struct cache_t* cache, FILE* data_source); /* test program */
+void cache2q_delete(struct cache2q_t* cache); /* deletes cache */
 
-void run_tests_2q(struct cache2q_t* cache, FILE* data_source); /* test 2q algorithm */
+void run_tests(struct cache_t* cache, FILE* data_source, int npages); /* test program */
+
+void run_tests_2q(struct cache2q_t* cache, FILE* data_source, int npages); /* test 2q algorithm */
