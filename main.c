@@ -4,20 +4,24 @@
 #include "include/List.h"
 #include "include/cache.h"
 
+#define TWOQ /* which version to use */
+
 
 int main () {
 
-	int main_size = 30;
+	#ifdef LRU
 
-	struct cache_t cache = cache_init(main_size);
+	cache_test();
+	system("make -f Makefile_cache.txt clean");
+	//system("make -f Makefile_tests.txt сlean");
 
-	FILE* tests = fopen("tests.txt", "r");
-    assert(tests);
+	#endif
 
-    system("make -f Makefile_tests.txt all");
-    system ("./tests");/* questionable */
+	#ifdef TWOQ
 
-	run_tests(&cache, tests);
+	cache_2q_test();
+
+	#endif
 
 	return 0;
 }
