@@ -8,4 +8,4 @@
 ### Угловский Артем(Уголок)
 ![alt text](https://github.com/StasSD/Cache_project/blob/Ignat/2/_d4rlFAP68E.jpg)
 ### Мельников Игнат(Мельников Игнат)
-![alt text](https://github.com/StasSD/Cache_project/blob/Ignat/2/AFYiO4ngYf8.jpg)
+![alt text](https://github.com/StasSD/Cache_project/blob/Ignat/2/mJDZvTP8eV4.jpg)
