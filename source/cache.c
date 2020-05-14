@@ -5,7 +5,6 @@
 #include "../include/List.h"
 #include "../include/LRU_hash.h"
 #include <assert.h>
-
 //#define DEBUG
 
 
@@ -327,7 +326,7 @@ void cache_test() {
 
 	system("make -f Makefile_tests.txt all");
    	system ("./tests"); /* questionable */
-   	FILE* tests = fopen("../tests.txt", "r");
+   	FILE* tests = fopen("tests.txt", "r");
    	assert(tests);
 
     fscanf(tests, "%d %d", &cache_size, &npages);
@@ -343,7 +342,7 @@ void cache_test() {
 
 	#else 
 
-	FILE* tests = fopen("../tests2.txt", "r"); /* additional tests*/
+	FILE* tests = fopen("tests2.txt", "r"); /* additional tests*/
 	assert(tests);
 
 	struct cache_t* cache = cache_init(3);
@@ -362,9 +361,9 @@ void cache_2q_test() {
 
 	#ifndef DEBUG
 
-    system("make -f Makefile_tests.txt all"); /* questionable */
-    //system("for i in /tests/*.out  do ./*.out");
-   	FILE* tests = fopen("./tests.txt", "r");
+    system("make -f Makefile_tests.txt all");
+   	system ("./tests"); /* questionable */
+   	FILE* tests = fopen("tests.txt", "r");
    	assert(tests);
 
     fscanf(tests, "%d %d", &cache_size, &npages);
@@ -382,7 +381,7 @@ void cache_2q_test() {
 
 	#else 
 
-	FILE* tests = fopen("../tests2.txt", "r"); /* additional tests*/
+	FILE* tests = fopen("tests2.txt", "r"); /* additional tests*/
 	assert(tests);
 
 	struct cache2q_t* cache = cache2q_init(3, 2, 3);

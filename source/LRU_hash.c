@@ -1,6 +1,5 @@
 #include "../include/LRU_hash.h"
 
-
 /*
 
 struct hash_node_t
@@ -119,10 +118,9 @@ void hash_delete_elem (int page, struct hash_table* s) {
 	struct hash_node_t* h_node;
 	struct hash_node_t* h_node_next;
 
-	if (hash_check_elem (page, *s) == 0)
-		return;
-	
 	h_node = hash_find_page (page, *s);
+	if (h_node == NULL)
+		return;
 	
 	if (h_node->prev == NULL) {
 		if (h_node->next == NULL) {
