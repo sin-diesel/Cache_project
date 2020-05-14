@@ -14,7 +14,6 @@ tests.o: tests/tests.c include/test_generator.h
 all: test_generator.o tests.o
 	$(CC) $(CFLAGS) test_generator.o tests.o -o tests/tests
 
-
 .PHONY: clean
 clean:
 	rm -r -f $(OBJECTS)
