@@ -1,0 +1,21 @@
+
+CC = gcc
+CFLAGS = -g -Wall -std=c99
+SOURCES = tests/test_generator.c tests/tests.c
+OBJECTS = $(SOURCES:.c=.o)
+
+test_generator.o: tests/test_generator.c include/test_generator.h
+	$(CC) $(CFLAGS) tests/test_generator.c -c -o test_generator.o
+
+tests.o: tests/tests.c include/test_generator.h
+	$(CC) $(CFLAGS) tests/tests.c -c -o tests.o
+
+.PHONY: all
+all: test_generator.o tests.o
+	$(CC) $(CFLAGS) test_generator.o tests.o -o tests/tests
+
+
+.PHONY: clean
+clean:
+	rm -r -f $(OBJECTS)
+	rm -f tests/tests
