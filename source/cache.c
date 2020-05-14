@@ -362,9 +362,9 @@ void cache_2q_test() {
 
 	#ifndef DEBUG
 
-    system("make -f Makefile_tests.txt all");
-   	system ("./tests"); /* questionable */
-   	FILE* tests = fopen(".//tests.txt", "r");
+    system("make -f Makefile_tests.txt all"); /* questionable */
+    //system("for i in /tests/*.out  do ./*.out");
+   	FILE* tests = fopen("./tests.txt", "r");
    	assert(tests);
 
     fscanf(tests, "%d %d", &cache_size, &npages);
