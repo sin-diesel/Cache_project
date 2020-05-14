@@ -62,7 +62,7 @@ struct hash_table* hash_init (int capacity) {
 	struct hash_table* s;
 	s = (struct hash_table*) calloc (1, sizeof (struct hash_table));
 	s->table = (struct hash_node_t*) calloc (capacity, sizeof(struct hash_node_t));
-	assert (s->table != NULL);
+	assert (s->table);
 
 	s->capacity = capacity;
 
