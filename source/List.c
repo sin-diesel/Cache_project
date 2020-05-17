@@ -223,7 +223,7 @@ void Print_List_Back(struct list_t* list)
 
 /// Create node for list
 /// @node if memory is not created
-static struct node_t* Create_Node()
+struct node_t* Create_Node()
 {
     struct node_t* node = (struct node_t*)calloc(1, sizeof(struct node_t));
     assert(node);
