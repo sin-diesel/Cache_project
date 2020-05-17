@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "List.h"
 
 struct hash_node_t
 {

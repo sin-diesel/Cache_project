@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "../include/test_generator.h"
+#include "test_generator.h"
 
 int main() {
 	
-	int cache_size = 100;
+	int cache_size = 150;
 	int max_pages = 10000;
 	int npages = 100000;
-	FILE* out_file = fopen("../tests.txt", "w");
+	FILE* out_file = fopen("tests_cache.txt", "w");
 	assert(out_file);
 	generate_nums(cache_size, npages, max_pages, out_file);
 	fclose(out_file);

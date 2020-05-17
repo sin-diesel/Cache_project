@@ -5,7 +5,7 @@
 #include "include/cache.h"
 
 
-#define TWOQ /* which version to use */
+#define LRU /* which version to use */
 
 
 int main () {
@@ -13,7 +13,7 @@ int main () {
 	#ifdef LRU
 
 	cache_test();
-	system("make -f Makefile_cache.txt clean");
+	//system("make -f Makefile_cache.txt clean");
 	//system("make -f Makefile_tests.txt сlean");
 
 	#endif

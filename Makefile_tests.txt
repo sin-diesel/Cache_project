@@ -1,20 +1,23 @@
 
 CC = gcc
-CFLAGS = -g -Wall -std=c99
-SOURCES = tests/test_generator.c tests/tests.c
+CFLAGS = -g -Wall -std=c99 -I include
+SOURCES = tests/test_generator.c tests/tests_cache.c tests/TestList.c tests/test_hash.c
 OBJECTS = $(SOURCES:.c=.o)
 
 test_generator.o: tests/test_generator.c include/test_generator.h
 	$(CC) $(CFLAGS) tests/test_generator.c -c -o test_generator.o
 
-tests.o: tests/tests.c include/test_generator.h
-	$(CC) $(CFLAGS) tests/tests.c -c -o tests.o
+tests_cache.o: tests/tests_cache.c include/test_generator.h
+	$(CC) $(CFLAGS) tests/tests_cache.c -c -o tests_cache.o
+
+cache: test_generator.o tests_cache.o
+	$(CC) $(CFLAGS) test_generator.o tests_cache.o -o tests_cache
+
 
 .PHONY: all
-all: test_generator.o tests.o
-	$(CC) $(CFLAGS) test_generator.o tests.o -o tests/tests
+all: test_generator.o tests_cache.o
+	$(CC) $(CFLAGS) test_generator.o tests_cache.o -o tests_cache
 
 .PHONY: clean
 clean:
-	rm -r -f $(OBJECTS)
-	rm -f tests/tests
+	rm -r -f tests_cache tests_cache.o test_generator.o

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
-#include "../include/test_generator.h"
+#include "test_generator.h"
 
 void generate_nums(int cache_size, int npages, int max_page, FILE* stream) {
 

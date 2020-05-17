@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -std=c99
+CFLAGS = -g -Wall -std=c99 -I include
 SOURCES = сache.c LRU_hash.c List.c main.c
 HEADERS = cache.h LRU_hash.h List.h
 OBJECTS = $(SOURCES:.c=.o)
@@ -24,5 +24,5 @@ all: main.o List.o LRU_hash.o cache.o
 .PHONY: clean
 clean:
 	rm -r -f $(OBJECTS)
-	rm -f cache.o
 	rm -f main
+	rm -r -f cache.o

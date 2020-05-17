@@ -1,4 +1,4 @@
-#include "../include/List.h"
+#include "List.h"
 
 static struct node_t* Create_Node();
 

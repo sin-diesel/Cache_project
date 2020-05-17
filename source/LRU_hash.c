@@ -1,4 +1,4 @@
-#include "../include/LRU_hash.h"
+#include "LRU_hash.h"
 
 /*
 
