@@ -1,32 +1,9 @@
 #include "LRU_hash.h"
 
-
-/*
-
-struct hash_node_t
-{
-	struct node_t *list_node_t;
-	struct hash_node_t *next, *prev;
-	int page;
-};
-
-struct hash_table
-{
-	struct hash_node_t *table;
-	int capacity;
-};
-
-*/
-
-
-
-// return hash of the page (hash < size of hash table)
 int hash_func (int page, struct hash_table s) {
-	int hash = ((page < 0) ? -page : page) % s.capacity;
-	return hash;
+	return ((page < 0) ? -page : page) % s.capacity;
 }
 
-//Create hash_node
 struct hash_node_t* hash_create_node (int page, struct node_t *list_node_t, struct hash_node_t *prev) {
 	struct hash_node_t* node;
 	node = (struct hash_node_t*) calloc (1, sizeof (struct hash_node_t));
@@ -38,7 +15,6 @@ struct hash_node_t* hash_create_node (int page, struct node_t *list_node_t, stru
 	return node;
 }
 
-//find this page in the branch
 struct hash_node_t* hash_find_page (int page, struct hash_table s) {
 	int hash_page;
 	struct hash_node_t *h_node;
@@ -57,7 +33,6 @@ struct hash_node_t* hash_find_page (int page, struct hash_table s) {
 	return NULL;
 }
 
-// create hash table with size=capacity (capacity >> list_size)
 struct hash_table* hash_init (int capacity) {
 	struct hash_table* s;
 	s = (struct hash_table*) calloc (1, sizeof (struct hash_table));
@@ -69,7 +44,6 @@ struct hash_table* hash_init (int capacity) {
 	return s;
 }
 
-// check if the page in hash table (Cache) (ret 1 if yes, 0 - vice verse)
 char hash_check_elem (int page, struct hash_table s) {
 	struct hash_node_t *h_node;
 	
@@ -78,7 +52,6 @@ char hash_check_elem (int page, struct hash_table s) {
 	return (h_node != NULL);
 }
 
-// add this page in hash table
 void hash_add_elem (int page, struct hash_table* s, struct node_t* pNode) {
 	
 	struct hash_node_t* ptr;
@@ -104,7 +77,6 @@ void hash_add_elem (int page, struct hash_table* s, struct node_t* pNode) {
 }
 
 
-//return position of current page in the list
 struct node_t* hash_page_position (int page, struct hash_table *s) {
 	
 	struct hash_node_t* h_node;
@@ -114,7 +86,6 @@ struct node_t* hash_page_position (int page, struct hash_table *s) {
 	return (h_node != NULL) ? h_node->list_node_t : NULL;
 }
 
-// delete this page from hash table
 void hash_delete_elem (int page, struct hash_table* s) {
 	struct hash_node_t* h_node;
 	struct hash_node_t* h_node_next;
@@ -150,7 +121,6 @@ void hash_delete_elem (int page, struct hash_table* s) {
 	free (h_node);
 }
 
-//free branch of hash
 void hash_free_branch (struct hash_node_t* top) {
 	if (top == NULL)
 		return;
@@ -159,7 +129,6 @@ void hash_free_branch (struct hash_node_t* top) {
 	free(top);
 }
 
-// free hash table
 void hash_free (struct hash_table* s) {
 	int i;
 	
@@ -169,5 +138,4 @@ void hash_free (struct hash_table* s) {
 	free(s->table);
 	s->capacity = 0;
 	free (s);
-} 
- 
+}

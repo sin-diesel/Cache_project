@@ -25,6 +25,7 @@ struct array arr_generator () {
 	return res;
 }
 
+
 void test (struct array a, int capacity) {
 	int *arr = a.arr;
 	int size = a.size;
@@ -51,19 +52,38 @@ void test (struct array a, int capacity) {
 		assert (hash_check_elem (arr[i], *s) == 0 && "delete");
 
 	hash_free (s);
+	printf ("freed\n");
 	free (node);
 }
 
+void hand_tests () {
+	int a1[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	int a2[1] = {1};
+	int a3[5] = {0};
+	int a4[9] = {1, 3, 5, 7, 9, 2, 4, 6, 11};
+	struct array arr1 = {a1, 10};
+	struct array arr2 = {a2, 1};
+	struct array arr3 = {a3, 5};
+	struct array arr4 = {a4, 9};
 
+	test (arr1, 10);
+	test (arr2, 2);
+	test (arr3, 1);
+	test (arr4, 2);
+}
+
+
+void rand_tests (int n) {
+	for (int i = 0; i < n; ++i)
+		test (arr_generator(), (rand() % 1000 + 1));
+}
 
 int main () {
 
 	srand (time(NULL));
 
-	for (int i = 0; i < 100; ++i) {
-		test (arr_generator(), (rand() % 1000 + 1));
-		//printf ("%d test passed\n", i);
-	}
+	hand_tests ();
+	rand_tests (100);
 
 	return 0;
 }
