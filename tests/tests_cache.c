@@ -5,7 +5,7 @@
 
 int main() {
 	
-	int cache_size = 150;
+	int cache_size = 100;
 	int max_pages = 10000;
 	int npages = 100000;
 	FILE* out_file = fopen("tests_cache.txt", "w");
