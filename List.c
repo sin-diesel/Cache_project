@@ -1,12 +1,17 @@
 #include "List.h"
 
-static struct node_t* Create_Node();
 
+/// Init list of the selected size
+/// @param [size] size - list size
+/// @param [struct hash_table* hash_table] hash_table - hash table pointer
+/// @returns list pointer
 struct list_t* Init_List(int size, struct hash_table* hashTable)
 {  
     assert(hashTable);
+
     struct node_t* top = NULL;
     struct node_t* tmp = NULL;
+    
     struct list_t* list = (struct list_t*)calloc(1, sizeof(struct list_t));
     assert(list);
     if (size == 0)
@@ -29,9 +34,13 @@ struct list_t* Init_List(int size, struct hash_table* hashTable)
     return list;
 }
 
+/// Сheck whether the underlying container is empty
+/// @param [struct list_t* list] list - list pointer  
+/// @returns 1 if list empty , 0 if list not empty
 char Is_Empty (struct list_t* list)
 {
-    assert(list);
+    if (list == NULL)
+        return 1;
     if (list->size == 0 && list->front_elem == NULL && list->back_elem == NULL)
         return 1;
     if (list->size == 0 && (list->front_elem != NULL || list->back_elem != NULL))
@@ -42,6 +51,11 @@ char Is_Empty (struct list_t* list)
     return 0;
 }
 
+
+/// Add elem in the end of the list, top of the list deleted
+/// @param [struct list_t* list] list - list pointer
+/// @param [page] page
+/// @note if the item is not found does nothing
 void Push_Back(struct list_t* list, int page)
 {
     if (Is_Empty(list))
@@ -75,6 +89,10 @@ void Push_Back(struct list_t* list, int page)
     hash_add_elem(page, list->hashTable, list->back_elem);
 }
 
+/// Add elem in the top of the list, end of the list deleted
+/// @param [struct list_t* list] list - list pointer
+/// @param [page] page
+/// @note if the item is not found does nothing
 void Push_Front(struct list_t* list, int page)
 {
   //  Print_List_Back(list);
@@ -108,6 +126,11 @@ void Push_Front(struct list_t* list, int page)
     hash_add_elem(page, list->hashTable, list->front_elem);
 }
 
+
+/// Add elem in the top of the list1 an, end of the list moves to the top of the list2
+/// @param [struct list_t* list1] list1 - first list pointer
+/// @param [struct list_t* list2] list2 - first list pointer
+/// @param [page] page
 void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page)
 {
     int page_back = list1->back_elem->page;
@@ -115,6 +138,12 @@ void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page)
     Push_Front(list2, page_back);
 }
 
+
+/// Сheck whether the underlying container is empty
+/// @param [struct list_t* list] list - list pointer  
+/// @param [page] page
+/// @note if the item is not found does nothing
+/// @returns 1 if list empty , 0 if list not empty
 void Move_Elem_Page(struct list_t* list, int page)
 {
     assert(list);
@@ -144,6 +173,9 @@ void Move_Elem_Page(struct list_t* list, int page)
     node->prev = NULL;
 }
 
+
+/// Free list
+/// @param [struct list_t* list] list - list pointer  
 void Free_List (struct list_t* list)
 {
     struct node_t* top = list->front_elem;
@@ -158,6 +190,8 @@ void Free_List (struct list_t* list)
     free(list);
 }
 
+/// Print list from the front
+/// @param [struct list_t* list] list - list pointer  
 void Print_List_Front(struct list_t* list)
 {
     if (list->size == 0)
@@ -171,6 +205,8 @@ void Print_List_Front(struct list_t* list)
     printf("\n");
 }
 
+/// Print list from the back
+/// @param [struct list_t* list] list - list pointer  
 void Print_List_Back(struct list_t* list)
 {
     if (list->size == 0)
@@ -184,13 +220,22 @@ void Print_List_Back(struct list_t* list)
     printf("\n");
 }
 
-static struct node_t* Create_Node()
+
+/// Create node for list
+/// @node if memory is not created
+struct node_t* Create_Node()
 {
     struct node_t* node = (struct node_t*)calloc(1, sizeof(struct node_t));
     assert(node);
     return node;
 }
 
+
+//Send to main , delete in out
+/// @param [struct list_t* out] out - out list pointer  
+/// @param [struct list_t* main] main - main list pointer  
+/// @param [page] page
+/// @note if the item is not found does nothing
 void Send_to_Main(struct list_t* out, struct list_t* main, int page)
 {
     assert(out);
@@ -219,6 +264,9 @@ void Send_to_Main(struct list_t* out, struct list_t* main, int page)
     return;
 }
 
+/// Assert list
+/// @param [struct list_t* list] list - list pointer
+/// @note if the list is not ok fail
 void Assert_List(struct list_t* list)
 {
     if (Is_Empty(list))
@@ -250,6 +298,8 @@ void Assert_List(struct list_t* list)
     }
 }
 
+/// Creating array from list
+/// @param [struct list_t* list] list - list pointer
 int* Create_ArrayByList(struct list_t* list){
     Assert_List(list);
     int* arr = (int*)calloc(Size_List(list), sizeof(int));
@@ -261,6 +311,8 @@ int* Create_ArrayByList(struct list_t* list){
     return arr;
 }
 
+/// Creates list from array
+/// @param [struct list_t* list] list - list pointer
 struct list_t* Create_ListByArray(int* arr, int len){
     struct hash_table* hashTable = hash_init(100 * len);
     struct list_t* list = Init_List(len, hashTable);
@@ -269,6 +321,9 @@ struct list_t* Create_ListByArray(int* arr, int len){
     return list;
 }
 
+/// Reszie list
+/// @param [struct list_t* list] list - list pointer
+/// @param [newsize] newsize - new size
 void Resize_List(struct list_t* list, int newsize){
     if (newsize < 0)
     {
@@ -307,6 +362,10 @@ void Resize_List(struct list_t* list, int newsize){
     }
 }
 
+
+/// Fill list
+/// @param [struct list_t* list] list - list pointer
+/// @param [val] val - the value of which is filled
 void Fill_List(struct list_t* list ,int val){
     struct node_t* top = list->front_elem;
     struct node_t* tmp = NULL;
