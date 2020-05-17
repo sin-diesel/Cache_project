@@ -1,0 +1,23 @@
+CC = gcc
+CFLAGS = -g -Wall -std=c99 -I include
+SOURCES = LRU_hash.c List.c TestList.c main.c
+HEADERS = LRU_hash.h List.h TestList.h
+OBJECTS = $(SOURCES:.c=.o)
+
+LRU_hash.o: LRU_hash.c LRU_hash.h
+	$(CC) $(CFLAGS) LRU_hash.c -c -o LRU_hash.o
+
+List.o: List.c List.h
+	$(CC) $(CFLAGS) List.c -c -o List.o
+
+TestList.o: TestList.c TestList.h
+	$(CC) $(CFLAGS) TestList.c -c -o TestList.o
+
+main.o: main.c
+	$(CC) $(CFLAGS) main.c -c -o main.o
+
+.PHONY: all
+all: main.o List.o LRU_hash.o TestList.o
+	$(CC) $(CFLAGS) main.o List.o LRU_hash.o TestList.o -o main
+
+
