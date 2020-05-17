@@ -5,7 +5,7 @@
 #include "include/cache.h"
 
 
-#define LRU /* which version to use */
+#define TWOQ /* which version to use */
 
 
 int main () {

@@ -1,12 +1,12 @@
-#pragma once
+ #pragma once
 
 #include <stdlib.h>
 #include "LRU_hash.h"
 #include "List.h"
 
 struct memory_t { /* main memory list + hash */
-	struct list_t pages;
-	struct hash_table hash;
+	struct list_t* pages;
+	struct hash_table* hash;
 };  
 
 struct cache_t { /* cache data structure */

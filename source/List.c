@@ -150,14 +150,19 @@ void Free_List (struct list_t* list)
 {
     struct node_t* top = list->front_elem;
     struct node_t* tmp = NULL;
+
     while (top != NULL)
     {
         tmp = top->next;
+       // fprintf(stderr, "freeing node %p\n", top);
         free(top);
+        //fprintf(stderr, "node freed %p\n", top);
         top = tmp;
     }
     list->size = 0;
+   // fprintf(stderr, "freeing List %p\n",list);
     free(list);
+    //fprintf(stderr, "list freed %p\n",list);
 }
 
 void Print_List_Front(struct list_t* list)

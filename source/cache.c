@@ -21,11 +21,11 @@ struct cache_t* cache_init(int main_size) {
 	assert(cache);
 
 	int hash_capacity = main_size * hash_factor; 
-	cache->main_mem.hash = *(hash_init(hash_capacity));
-	assert(&(cache->main_mem.hash));
+	cache->main_mem.hash = hash_init(hash_capacity);
+	assert(cache->main_mem.hash);
 
-	cache->main_mem.pages = *(Init_List(main_size, &(cache->main_mem.hash)));
-	assert(&(cache->main_mem.hash));
+	cache->main_mem.pages = Init_List(main_size, cache->main_mem.hash);
+	assert(cache->main_mem.hash);
 
 	cache->main_mem_size = main_size;
 
@@ -57,20 +57,20 @@ struct cache2q_t* cache2q_init(int main_size, int in_size, int out_size) {
 	int hash_in_capacity = in_size * hash_factor;
 	int hash_out_capacity = out_size * hash_factor;
 
-	cache->main_mem.hash = *(hash_init(hash_main_capacity));
-	assert(&(cache->main_mem.hash));
-	cache->main_mem.pages = *(Init_List(main_size, &(cache->main_mem.hash)));
-	assert(&(cache->main_mem.hash));
+	cache->main_mem.hash = hash_init(hash_main_capacity);
+	assert(cache->main_mem.hash);
+	cache->main_mem.pages = Init_List(main_size, cache->main_mem.hash);
+	assert(cache->main_mem.hash);
 
-	cache->in_mem.hash = *(hash_init(hash_in_capacity));
-	assert(&(cache->in_mem.hash));
-	cache->in_mem.pages = *(Init_List(in_size, &(cache->in_mem.hash)));
-	assert(&(cache->in_mem.hash));
+	cache->in_mem.hash = hash_init(hash_in_capacity);
+	assert(cache->in_mem.hash);
+	cache->in_mem.pages = Init_List(in_size, cache->in_mem.hash);
+	assert(cache->in_mem.hash);
 
-	cache->out_mem.hash = *(hash_init(hash_out_capacity));
-	assert(&(cache->out_mem.hash));
-	cache->out_mem.pages = *(Init_List(main_size, &(cache->out_mem.hash)));
-	assert(&(cache->out_mem.hash));
+	cache->out_mem.hash = hash_init(hash_out_capacity);
+	assert(cache->out_mem.hash);
+	cache->out_mem.pages = Init_List(main_size, cache->out_mem.hash);
+	assert(cache->out_mem.hash);
 
 	cache->main_mem_size = main_size;
 	cache->in_mem_size = in_size;
@@ -92,14 +92,14 @@ void cache2q_delete(struct cache2q_t* cache) {
 
 	assert(cache);
 
-	struct list_t* main_pages = &(cache->main_mem.pages);
-	struct hash_table* main_hash = &(cache->main_mem.hash);
+	struct list_t* main_pages = cache->main_mem.pages;
+	struct hash_table* main_hash = cache->main_mem.hash;
 
-	struct list_t* in_pages = &(cache->in_mem.pages);
-	struct hash_table* in_hash = &(cache->in_mem.hash);
+	struct list_t* in_pages = cache->in_mem.pages;
+	struct hash_table* in_hash = cache->in_mem.hash;
 
-	struct list_t* out_pages = &(cache->out_mem.pages);
-	struct hash_table* out_hash = &(cache->out_mem.hash);
+	struct list_t* out_pages = cache->out_mem.pages;
+	struct hash_table* out_hash = cache->out_mem.hash;
 
 	hash_free(main_hash);
 	Free_List(main_pages);
@@ -122,10 +122,10 @@ int handle_page(struct cache_t* cache, int page) {
 
 	char result = 0;
 
-	struct list_t* main_pages = &(cache->main_mem.pages);
+	struct list_t* main_pages = cache->main_mem.pages;
 
 
-	result = hash_check_elem(page, cache->main_mem.hash);
+	result = hash_check_elem(page, *(cache->main_mem.hash));
 
 	#ifdef DEBUG
 	fprintf(stderr, "Current page: %d\n", page);
@@ -164,14 +164,14 @@ int handle_page_2q(struct cache2q_t* cache, int page) {
 	char result_in = 0;
 	char result_out = 0;
 
-	struct list_t* main_pages = &(cache->main_mem.pages);
-	struct list_t* in_pages = &(cache->in_mem.pages);
-	struct list_t* out_pages = &(cache->out_mem.pages);
+	struct list_t* main_pages = cache->main_mem.pages;
+	struct list_t* in_pages = cache->in_mem.pages;
+	struct list_t* out_pages = cache->out_mem.pages;
 
 	int result = 0;
 
 
-	result_main = hash_check_elem(page, cache->main_mem.hash);
+	result_main = hash_check_elem(page, *(cache->main_mem.hash));
 	#ifdef DEBUG
 	fprintf(stderr, "Current page: %d\n", page);
 	fprintf(stderr, "Current cache state: \n");
@@ -187,8 +187,8 @@ int handle_page_2q(struct cache2q_t* cache, int page) {
 
 	if (result_main == 0) { // not in the main memory
 
-		result_out = hash_check_elem(page, cache->out_mem.hash);
-		result_in = hash_check_elem(page, cache->in_mem.hash);
+		result_out = hash_check_elem(page, *(cache->out_mem.hash));
+		result_in = hash_check_elem(page, *(cache->in_mem.hash));
 
 		if (result_out == 1) {
 			Send_to_Main(out_pages, main_pages, page);
@@ -227,8 +227,8 @@ void cache_delete(struct cache_t* cache) {
 
 	assert(cache);
 
-	struct list_t* main_pages = &(cache->main_mem.pages);
-	struct hash_table* main_hash = &(cache->main_mem.hash);
+	struct list_t* main_pages = cache->main_mem.pages;
+	struct hash_table* main_hash = cache->main_mem.hash;
 
 
 	hash_free(main_hash);
@@ -337,8 +337,9 @@ void cache_test() {
     assert(cache);
 
     run_tests(cache, tests, npages);
+    fclose(tests);
 
-	//cache_delete(cache);
+	cache_delete(cache);
 
 	#else 
 
@@ -347,6 +348,7 @@ void cache_test() {
 
 	struct cache_t* cache = cache_init(3);
 	run_tests(cache, tests);
+	fclose(tests);
 	#endif
 }
 
@@ -377,7 +379,8 @@ void cache_2q_test() {
     assert(cache);
 
     run_tests_2q(cache, tests, npages);
-    //cache2q_delete(cache);
+    cache2q_delete(cache);
+    fclose(tests);
 
 	#else 
 
@@ -386,6 +389,7 @@ void cache_2q_test() {
 
 	struct cache2q_t* cache = cache2q_init(3, 2, 3);
 	run_tests_2q(cache, tests);
+	fclose(tests);
 
 	#endif
 }

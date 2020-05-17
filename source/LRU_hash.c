@@ -1,5 +1,6 @@
 #include "LRU_hash.h"
 
+
 /*
 
 struct hash_node_t
@@ -28,7 +29,7 @@ int hash_func (int page, struct hash_table s) {
 //Create hash_node
 struct hash_node_t* hash_create_node (int page, struct node_t *list_node_t, struct hash_node_t *prev) {
 	struct hash_node_t* node;
-	node = (struct hash_node_t*) calloc (1, sizeof (struct hash_node_t));
+    node = (struct hash_node_t*) calloc (1, sizeof (struct hash_node_t));
 	
 	node->page = page;
 	node->prev = prev;
@@ -60,6 +61,9 @@ struct hash_node_t* hash_find_page (int page, struct hash_table s) {
 struct hash_table* hash_init (int capacity) {
 	struct hash_table* s;
 	s = (struct hash_table*) calloc (1, sizeof (struct hash_table));
+	#ifdef DEBUG
+	fprintf(stderr, " hash table created %p\n", s);
+	#endif
 	s->table = (struct hash_node_t*) calloc (capacity, sizeof(struct hash_node_t));
 	assert (s->table != NULL);
 
@@ -154,6 +158,10 @@ void hash_free_branch (struct hash_node_t* top) {
 	if (top == NULL)
 		return;
 
+	#ifdef DEBUG
+	fprintf(stderr, "hash node %p\n", top);
+	#endif
+
 	hash_free_branch (top->next);
 	free(top);
 }
@@ -165,8 +173,22 @@ void hash_free (struct hash_table* s) {
 	for (i = 0; i < s->capacity; ++i)
 		hash_free_branch (s->table[i].next);
 
+	#ifdef DEBUG
+	fprintf(stderr, " table %p\n", s->table);
+	#endif
 	free(s->table);
+	#ifdef DEBUG
+	fprintf(stderr, " table freed %p\n", s->table);
+	#endif
 	s->capacity = 0;
+
+	#ifdef DEBUG
+	fprintf(stderr, " hash table %p\n", s);
+	#endif
 	free (s);
+	#ifdef DEBUG
+	fprintf(stderr, " hash table freed %p\n", s);
+	#endif
 } 
+
  
