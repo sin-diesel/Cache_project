@@ -1,17 +1,17 @@
 CC = gcc
-CFLAGS = -c -g -Wall -std=c99
+CFLAGS = -g -Wall -std=c99
 SOURCES = test_hash.c List.c LRU_hash.c
 HEADERS = List.h LRU_hash.h
 OBJECTS = $(SOURCES: .c=.o)
 
 List.o: List.c List.h
-	$(CC) $(CFLAGS) List.c -o List
+	$(CC) $(CFLAGS) List.c -с -o List
 
 LRU_hash.o: LRU_hash.c LRU_hash.h
-	$(CC) $(CFLAGS) LRU_hash.c -o LRU_hash
+	$(CC) $(CFLAGS) LRU_hash.c -с -o LRU_hash
 
 test_hash.o: test_hash.c
-	$(CC) $(CFLAGS) test_hash.c -o test_hash
+	$(CC) $(CFLAGS) test_hash.c -с -o test_hash
 
 .PHONY: all
 all: List.o LRU_hash.o test_hash.o
