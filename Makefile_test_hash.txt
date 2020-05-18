@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -c -g -o0 -Wal -std=c99
+CFLAGS = -c -g -o0 -Wall -std=c99
 SOURCES = test_hash.c List.c LRU_hash.c
 HEADERS = List.h LRU_hash.h
 OBJECTS = $(SOURCES: .c=.o)
