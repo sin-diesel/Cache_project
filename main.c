@@ -13,9 +13,7 @@ int main () {
 	#ifdef LRU
 
 	cache_test();
-	//system("make -f Makefile_cache.txt clean");
-	//system("make -f Makefile_tests.txt сlean");
-
+		
 	#endif
 
 	#ifdef TWOQ

@@ -33,6 +33,8 @@ static inline int Size_List (struct list_t* list){return list->size;};
 //init list of the selected size
 struct list_t* Init_List(int size, struct hash_table* hashTable);
 
+struct node_t* Create_Node();
+
 //check whether the underlying container is empty
 char Is_Empty (struct list_t* list);
 
@@ -64,17 +66,10 @@ void Print_List_Back(struct list_t* list);
 //Assert List
 void Assert_List(struct list_t* list);
 
-//Create node for list
-struct node_t* Create_Node();
-
-//Creating array from list
 int* Create_ArrayByList(struct list_t* list);
 
-//creates list from array
 struct list_t* Create_ListByArray(int* arr, int len);
 
-//Resize list
 void Resize_List(struct list_t* list, int newsize);
 
-//Fill list
 void Fill_List(struct list_t* list ,int val);
