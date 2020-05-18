@@ -64,10 +64,17 @@ void Print_List_Back(struct list_t* list);
 //Assert List
 void Assert_List(struct list_t* list);
 
+//Create node for list
+struct node_t* Create_Node();
+
+//Creating array from list
 int* Create_ArrayByList(struct list_t* list);
 
+//creates list from array
 struct list_t* Create_ListByArray(int* arr, int len);
 
+//Resize list
 void Resize_List(struct list_t* list, int newsize);
 
+//Fill list
 void Fill_List(struct list_t* list ,int val);
