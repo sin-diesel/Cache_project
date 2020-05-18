@@ -10,7 +10,7 @@ List.o: List.c List.h
 LRU_hash.o: LRU_hash.c LRU_hash.h
 	$(CC) $(CFLAGS) LRU_hash.c -o LRU_hash.o
 
-test_hash.o: test_hash.c test_hash.h
+test_hash.o: test_hash.c
 	$(CC) $(CFLAGS) test_hash.c -o test_hash.o
 
 .PHONY: all
