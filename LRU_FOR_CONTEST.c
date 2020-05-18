@@ -36,8 +36,8 @@ struct list_t {
 
 struct cache_t { /* cache data structure */
 
-	struct list_t main_mem; /* main memory list + hash */
-	struct hash_table main_hash;
+	struct list_t* main_mem; /* main memory list + hash */
+	struct hash_table* main_hash;
 	unsigned main_mem_size;
 
 	unsigned elements_ctr; /* elements counter */
@@ -148,16 +148,10 @@ void hash_add_elem (int page, struct hash_table* s, struct node_t* pNode) {
 	struct hash_node_t* ptr;
 	int hash_page;
 
-#ifdef DEBAG
-	printf ("adding in hash...\n");
-#endif
+
 
 	assert (pNode != NULL);
 	if (hash_check_elem (page, *s) == 1) {
-
-#ifdef DEBAG
-    printf ("already in hash\n");
-#endif
 
 		return;
 	}
@@ -169,9 +163,7 @@ void hash_add_elem (int page, struct hash_table* s, struct node_t* pNode) {
 		ptr->list_node_t = pNode;
 		ptr->page = page;
 
-#ifdef DEBAG
-	    printf ("added in hash\n");
-#endif
+
 		return;
 	}
 
@@ -181,10 +173,6 @@ void hash_add_elem (int page, struct hash_table* s, struct node_t* pNode) {
 		ptr = ptr->next;
 
 	ptr->next = hash_create_node (page, pNode, ptr);
-
-#ifdef DEBAG
-    printf ("added in hash's branch\n");
-#endif
 
 }
 
@@ -204,15 +192,7 @@ void hash_delete_elem (int page, struct hash_table* s) {
 	struct hash_node_t* h_node;
 	struct hash_node_t* h_node_next;
 
-#ifdef DEBAG
-    printf ("deleting %d->[%d] from hash...\n", page, hash_func (page, *s));
-#endif
-
 	if (hash_check_elem (page, *s) == 0) {
-
-#ifdef DEBAG
-    	printf ("nothing to delete from hash\n");
-#endif
 
 		return;
 	}
@@ -224,9 +204,6 @@ void hash_delete_elem (int page, struct hash_table* s) {
 			h_node->page = 0;
 			h_node->list_node_t = NULL;
 
-#ifdef DEBAG
-    	printf ("deleted from hash\n");
-#endif
 
 			return;
 		}
@@ -240,10 +217,6 @@ void hash_delete_elem (int page, struct hash_table* s) {
 		if (h_node->next != NULL)
 			h_node->next->prev = h_node;
 
-#ifdef DEBAG
-    	printf ("deleted from hash\n");
-#endif
-
 		return;
 	}
 
@@ -254,9 +227,6 @@ void hash_delete_elem (int page, struct hash_table* s) {
 
 	free (h_node);
 
-#ifdef DEBAG
-    printf ("deleted from hash's branch\n");
-#endif
 }
 
 //free branch of hash
@@ -390,7 +360,6 @@ char Is_Empty (struct list_t* list)
     
     if (list->size == 0 && (list->front_elem != NULL || list->back_elem != NULL))
     {
-        printf("ERROR : list size");
         exit(1);
     }
     
@@ -411,13 +380,9 @@ void Push_Front(struct list_t* list, int page)
 
     //Print_List_Back(list);
 
-#ifdef DEBAG
-    printf ("pushing...\n");
-#endif
     
     if (Is_Empty(list))
     {
-        printf("ERROR: list void");
         exit(3);
     }
     
@@ -432,9 +397,6 @@ void Push_Front(struct list_t* list, int page)
 
     hash_delete_elem(new_front->page, list->hashTable);
 
-#ifdef DEBAG
-    printf("in pushing after deleting\n");
-#endif
 
     list->back_elem = list->back_elem->prev;
     list->back_elem->next = NULL;
@@ -447,10 +409,6 @@ void Push_Front(struct list_t* list, int page)
     list->front_elem = new_front;
 
     hash_add_elem(page, list->hashTable, list->front_elem);
-
-#ifdef DEBAG
-    printf ("pushed\n");
-#endif
 }
 
 void Exchange_Elem(struct list_t* list1, struct list_t* list2, int page)
@@ -467,9 +425,6 @@ void Move_Elem_Page(struct list_t* list, int page)
 
     assert(list);
 
-#ifdef DEBAG
-    printf ("moving...\n");
-#endif
 
     node = hash_page_position(page, list->hashTable);
 
@@ -496,9 +451,6 @@ void Move_Elem_Page(struct list_t* list, int page)
     list->front_elem = node;
     node->prev = NULL;
 
-#ifdef DEBAG
-    printf ("moved\n");
-#endif
 }
 
 void Free_List (struct list_t* list)
@@ -560,11 +512,11 @@ struct cache_t* cache_init(int main_size) {
 	cache = (struct cache_t*) calloc(1, sizeof(struct cache_t));
 	assert(cache);
 
-	cache->main_hash = *(hash_init(capacity));
-	assert(&(cache->main_hash));
+	cache->main_hash = hash_init(capacity);
+	assert(cache->main_hash);
 
-	cache->main_mem = *(Init_List(main_size, &(cache->main_hash)));
-	assert(&(cache->main_mem));
+	cache->main_mem = Init_List(main_size, cache->main_hash);
+	assert(cache->main_mem);
 
 	cache->main_mem_size = main_size;
 
@@ -576,10 +528,10 @@ struct cache_t* cache_init(int main_size) {
 int handle_page(struct cache_t* cache, int page) {
 	int res;
 	
-	if ((res = hash_check_elem (page, cache->main_hash)) == 0)
-		Push_Front (&cache->main_mem, page);
+	if ((res = hash_check_elem (page, *(cache->main_hash))) == 0)
+		Push_Front (cache->main_mem, page);
 	else
-		Move_Elem_Page (&cache->main_mem, page);
+		Move_Elem_Page (cache->main_mem, page);
 
 	return res;
 }
@@ -587,8 +539,8 @@ int handle_page(struct cache_t* cache, int page) {
 
 void cache_delete(struct cache_t* cache) {
 
-	struct list_t* main_mem = &(cache->main_mem);
-	struct hash_table* main_hash = &(cache->main_hash);
+	struct list_t* main_mem = cache->main_mem;
+	struct hash_table* main_hash = cache->main_hash;
 
 	assert(cache);
 
@@ -604,15 +556,7 @@ void run_tests(struct cache_t* cache, int *arr, int arr_size) {
 
 	for (n = 0; n < arr_size; ++n) {
 
-#ifdef DEBAG
-		printf ("%d -> [%d]:\n", arr[n], hash_func (arr[n], cache->main_hash));
-#endif
-
 		hits += handle_page(cache, arr[n]);
-
-#ifdef DEBAG
-		printf ("\n\n");
-#endif
 
 	}
 
@@ -639,14 +583,7 @@ int main () {
 
 	for (i = 0; i < arr_size; ++i) {
 		scanf ("%d", &arr[i]);
-#ifdef DEBAG
-		printf ("%d -> [%d] ", arr[i], hash_func (arr[i], cache->main_hash));
-#endif
 	}
-
-#ifdef DEBAG
-	printf ("\n");
-#endif
 
 	run_tests(cache, arr, arr_size);
 
